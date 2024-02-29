@@ -1,0 +1,79 @@
+{% extends 'shared/_layout.html' %}
+{% load poll_exteras %}
+{% block title %}
+    لیست خرید های قبلی
+{% endblock %}
+
+{% block content %}
+
+    <div class="pa-breadcrumb">
+        <div class="container-fluid">
+            <div class="pa-breadcrumb-box">
+                <h1>خرید های قبلی</h1>
+                <ul>
+                    <li><a href="{% url 'home_page' %}">خانه</a></li>
+                    <li>خرید های قبلی</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        {% if order_list %}
+            <div class="col-md-6 mx-auto my-5">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">لیست خرید های قبلی</h5>
+                        <p class="card-text">در اینجا تمامی خرید های قبلی شما آمده است. برای مشاهده جزییات کلیک
+                            کنید.</p>
+                        <table class="table table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>شناسه</th>
+                                <th>نام و نام خانوادگی و شماره موبایل تحویل گیرنده</th>
+                                <th>تاریخ سفارش</th>
+                                <th>کل مبلغ خرید</th>
+                                <th>وضعیت سفارش</th>
+                                <th>دستورات</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for order in order_list %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ order.address.full_name }} - {{ order.address.phone_number }}</td>
+                                    <td>{{ order.payment_date|show_jalali_date }}</td>
+                                    <td>{{ order.payable_amount | three_digits_currency }}</td>
+                                    <td>{{ order.status }}</td>
+                                    <td><a href="{% url 'user_detail_shopping' order_id=order.id %}">جزییات</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+                        <ul class="pagination d-block">
+                            {% if page_obj.has_previous %}
+                                <li><a href="?page={{ page_obj.previous_page_number }}">قبلی</a></li>
+                            {% endif %}
+                            {% for pageNumber in paginator.page_range %}
+                                <li class="{% if pageNumber == page_obj.number %}active{% endif %}"><a
+                                        href="?page={{ pageNumber }}">{{ pageNumber }}</a>
+                                </li>
+                            {% endfor %}
+                            {% if page_obj.has_next %}
+                                <li><a href="?page={{ page_obj.next_page_number }}">بعدی</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        {% else %}
+            <div class="alert alert-warning m-5">
+                <p>هنوز سفارشی ثبت نکرده اید</p>
+            </div>
+        {% endif %}
+    </div>
+
+
+{% endblock %}

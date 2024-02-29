@@ -1,0 +1,71 @@
+{% extends 'admin_panel/shared/_admin_layout.html' %}
+
+{% block title %}
+    ایجاد  کد تخفیف
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class=" alert alert-{{ message.tags }}" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="close"><span
+                                aria-hidden="true">&times;</span></button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <strong class="card-title">ایجاد کد تخفیف جدید</strong>
+                </div>
+                <div class="card-body">
+                    <form autocomplete="off" method="post" action="{% url 'add_coupon_admin_page' %}"
+                          novalidate="">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="col-md-4 mb-3">
+                                <label>عنوان کد تخفیف</label>
+                                <div class="input-group">
+                                    {{ form.title }}
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>کد تخفیف</label>
+                                <div class="input-group">
+                                    {{ form.code }}
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>میزان درصد کد تخفیف</label>
+                                {{ form.discount }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>معتبر از تاریخ</label>
+                                {{ form.valid_from }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>معتبر تا تاریخ</label>
+                                {{ form.valid_to }}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label>کابرانی که از کد تخفیف استفاده کردن</label>
+                                {{ form.used_by }}
+                                <small class="text-muted">- لازم به پر کردن این فیلد نمی باشد.</small>
+                            </div>
+                        </div>
+                        <div class="custom-control custom-checkbox mb-3">
+                            {{ form.is_active }}
+                            <label class="custom-control-label" for="customControlValidation1">فعال / غیرفعال</label>
+                        </div>
+
+                        <button class="btn btn-primary" type="submit">ایجاد</button>
+                    </form>
+                </div> <!-- /.card-body -->
+            </div> <!-- /.card -->
+        </div>
+    </div>
+
+{% endblock %}

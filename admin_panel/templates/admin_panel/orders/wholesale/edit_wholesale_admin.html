@@ -1,0 +1,140 @@
+{% extends 'admin_panel/shared/_admin_layout.html' %}
+{% load poll_exteras %}
+{% block title %}
+    جزییات سفارش عمده
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class=" alert alert-{{ message.tags }}" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="close"><span
+                                aria-hidden="true">&times;</span></button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <strong class="card-title">جزییات سفارش</strong>
+                </div>
+                <div class="card-body">
+                    <form enctype="multipart/form-data" method="post"
+                          action="{% url 'edit_wholesale_admin_page' pk=current_whole.id %}"
+                          novalidate="">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="col-md-3 mb-3">
+                                <label>نام و نام خانوادگی</label>
+                                {{ form.full_name }}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label>نام شرکت</label>
+                                <div class="input-group">
+                                    {{ form.company_name }}
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label>شماره موبایل</label>
+                                {{ form.phone_number }}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label>شماره ثابت</label>
+                                {{ form.landline_phone }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label>ایمیل</label>
+                                {{ form.email }}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label>بیانه</label>
+                                {{ form.statement }}
+                                <span id="formattedAmount"></span>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label>کل مبلغ پرداخت شده</label>
+                                {{ form.total_amount_payable }}
+                                <span id="formattedAmount"></span>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label>کل مبلغ قابل پرداخت</label>
+                                {{ form.total_amount_paid }}
+                                <span id="formattedAmount"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label>آدرس کامل</label>
+                                {{ form.full_address }}
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <label class="p-3">محصولات</label>
+                            <div class="form-group">
+                                {{ form.product }}
+                                {{ form.media }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 my-4">
+                                <div class="custom-control custom-checkbox mb-3">
+                                    {{ form.payment_status }}
+                                    <label class="custom-control-label" for="customControlValidation1">پرداخت شده /
+                                        نشده</label>
+                                </div>
+                            </div>
+                            <div class="col-md-8 mb-3">
+                                <label>وضعیت سفارش</label>
+                                {{ form.status }}
+                            </div>
+
+                        </div>
+                        <button class="btn btn-primary" type="submit">ذخیره</button>
+                    </form>
+                    <button class="btn btn-danger float-right" type="button" data-toggle="modal"
+                            data-target="#deleteModal">
+                        <span><i class="fe fe-trash-2"></i></span> حذف
+                    </button>
+                    <a href="{% url 'wholesale_invoice_admin_page' pk=current_whole.id %}">
+                        <button class="btn mx-5 btn-primary float-right" type="button">
+                            <span><i class="fe fe-file-text"></i></span> مشاهده صورتحساب
+                        </button>
+                    </a>
+
+                    <!-- Delete Confirmation Modal -->
+                    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+                         aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel">حذف سفارش</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    آیا از حذف این سفارش اطمینان دارید؟
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بی‌خیال
+                                    </button>
+                                    <form id="delete-form" method="post"
+                                          action="{% url 'wholesale_delete_admin_page' pk=current_whole.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">حذف</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- /.card-body -->
+            </div> <!-- /.card -->
+        </div>
+    </div>
+    <script src="/static/admin_panel/js/currency-converter.js"></script>
+{% endblock %}

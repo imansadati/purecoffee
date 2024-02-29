@@ -1,0 +1,110 @@
+{% extends 'shared/_layout.html' %}
+{% load thumbnail %}
+{% load render_partial %}
+{% block title %}
+    لیست محصولات
+{% endblock %}
+{% block content %}
+    <div class="pa-breadcrumb">
+        <div class="container-fluid">
+            <div class="pa-breadcrumb-box">
+                <h1>فروشگاه</h1>
+                <ul>
+                    <li><a href="{% url 'home_page' %}">خانه</a></li>
+                    <li>فروشگاه</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="pa-product-shop spacer-top spacer-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 order-lg-last">
+                    <div class="row">
+                        {% if products %}
+                            {% for product in products %}
+
+                                <div class="col-sm-6">
+                                    {% include 'includes/product_item_partial.html' %}
+                                </div>
+                            {% endfor %}
+
+
+                            <ul class="pagination d-block">
+                                {% if page_obj.has_previous %}
+                                    <li><a href="?page={{ page_obj.previous_page_number }}">قبلی</a></li>
+                                {% endif %}
+                                {% for pageNumber in paginator.page_range %}
+                                    <li class="{% if pageNumber == page_obj.number %}active{% endif %}"><a
+                                            href="?page={{ pageNumber }}">{{ pageNumber }}</a>
+                                    </li>
+                                {% endfor %}
+                                {% if page_obj.has_next %}
+                                    <li><a href="?page={{ page_obj.next_page_number }}">بعدی</a></li>
+                                {% endif %}
+                            </ul>
+                        {% else %}
+                            <div class="alert alert-warning">
+                                <p>هیچ محصولی یافت نشد.</p>
+                            </div>
+                        {% endif %}
+
+                        {% for banner in banners %}
+                            <div class="col-md-12">
+                                <div class="pa-add pt-5">
+                                    {% thumbnail banner.image "730x200" quality=98 crop="center" as im %}
+                                        <a href="{{ banner.url }}">
+                                            <img src="{{ im.url }}" alt="banner" class="img-fluid">
+                                        </a>
+                                    {% endthumbnail %}
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="pa-product-sidebar">
+                        <div class="pa-widget pa-search">
+                            <form action="" method="get">
+                                <input name="search" type="search" placeholder="جستجوی محصول">
+                                <button class="pa-btn">جستجو</button>
+                            </form>
+                        </div>
+
+                        {% render_partial 'product_module.views.product_category_component' %}
+
+                        <div class="pa-widget pa-product-widget">
+                            <h2 class="pa-sidebar-title">محصولات برتر</h2>
+                            <ul>
+                                {% for product in top_products %}
+                                    <li>
+                                        <div class="pa-pro-wid-img">
+                                            <img src="{{ product.product.image.url }}" alt="{{ product.title }}"
+                                                 class="img-fluid">
+                                        </div>
+                                        <div class="pa-pro-wid-content">
+                                            <h4><a href="{{ product.product.get_absolute_url }}">{{ product.title }}</a>
+                                            </h4>
+                                            <p>{{ product.product.short_description|safe }}</p>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+
+                            </ul>
+                        </div>
+                        <div class="pa-widget">
+                            <h2 class="pa-sidebar-title">شبکه های اجتماعی</h2>
+                            <a href="https://www.instagram.com/{{ social_medias.instagram }}" class="social-icon"><i
+                                    class="fab fa-instagram"></i></a>
+                            <a href=http://t.me/{{ social_medias.telegram }}" class="social-icon"><i
+                                    class="fab fa-telegram"></i></a>
+                            <a href="https://www.youtube.com/{{ social_medias.youtube }}" class="social-icon"><i
+                                    class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

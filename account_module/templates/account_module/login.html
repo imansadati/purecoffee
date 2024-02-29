@@ -1,0 +1,51 @@
+{% extends 'shared/_layout.html' %}
+
+{% block title %}
+    ورود
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="login-container p-5">
+
+        <form method="post" action="{% url 'login_page' %}">
+            {% csrf_token %}
+
+            <h2>ورود</h2>
+            <p>خوش آمدید</p>
+            <div class="input-div one">
+                <div class="i">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div>
+                    {{ login_form.phone_number }}
+                    {{ login_form.phone_number.errors }}
+                </div>
+            </div>
+            <div class="input-div two">
+                <div class="i">
+                    <i class="fas fa-key"></i>
+                </div>
+                <div>
+                    {{ login_form.password }}
+                    {{ login_form.password.errors }}
+                </div>
+            </div>
+
+            <input type="submit" class="btn" value="ورود">
+            <a class="forgot" href="{% url 'forgot_password_page' %}">کلمه عبور را فراموش کرده ام</a>
+            <div class="others">
+                <hr>
+                <p>یا</p>
+                <hr>
+            </div>
+            <div class="account">
+                <p>ثبت نام نکرده اید؟</p>
+                <a href="{% url 'register_page' %}">ثبت نام</a>
+            </div>
+        </form>
+
+    </div>
+
+{% endblock %}

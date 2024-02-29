@@ -1,0 +1,226 @@
+{% extends 'admin_panel/shared/_admin_layout.html' %}
+{% load poll_exteras %}
+{% block title %}
+    جزییات کاربر
+{% endblock %}
+
+{% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class=" alert alert-{{ message.tags }}" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="close"><span
+                        aria-hidden="true">&times;</span></button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10 col-xl-8">
+                <h2 class="h3 mb-4 page-title">کاربر</h2>
+                <div class="my-4">
+                    <form action="{% url 'edit_user_admin_page' pk=current_user.id %}" method="post">
+                        {% csrf_token %}
+                        <hr class="my-4">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>نام و نام خانوادگی</label>
+                                {{ form.full_name }}
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>نام</label>
+                                {{ form.first_name }}
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>نام خانوادگی</label>
+                                {{ form.last_name }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label>ایمبل</label>
+                                {{ form.email }}
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>تاریخ پیوستن</label>
+                                {{ form.date_joined }}
+                                <small class="form-text text-muted">- شما 3.5 ساعت از زمان سرور جلو هستید.</small>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>آخرین ورور به سایت</label>
+                                {{ form.last_login }}
+                                <small class="form-text text-muted">- شما 3.5 ساعت از زمان سرور جلو هستید.</small>
+                            </div>
+
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>گذرواژه</label>
+                                {{ form.password }}
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>نام کاربری</label>
+                                {{ form.username }}
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>شماره موبایل</label>
+                                {{ form.phone_number }}
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>کد یکبار مصرف</label>
+                                {{ form.otp }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>اجازه‌های کاربر</label>
+                                {{ form.user_permissions }}
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>گروه‌ها</label>
+                                {{ form.groups }}
+                            </div>
+                        </div>
+                        <hr class="my-4">
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <div class="form-group custom-control custom-checkbox mb-3">
+                                    {{ form.is_active }}
+                                    <label class="custom-control-label" for="customControlValidation1">فعال /
+                                        غیرفعال</label>
+                                </div>
+                                <small class="form-text text-muted">- نشان می‌دهد که آیا این کاربر اجازهٔ فعالیت دارد یا
+                                    خیر. به جای حذف کاربر این تیک را بردارید.
+                                </small>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group custom-control custom-checkbox mb-3">
+                                    {{ form.is_staff }}
+                                    <label class="custom-control-label" for="customControlValidation2">کارمند /
+                                        غیر کارمند</label>
+                                </div>
+                                <small class="form-text text-muted">- نشان می‌دهد که آیا این کاربر می‌تواند وارد این
+                                    وبگاه مدیریت شود یا خیر.
+                                </small>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group custom-control custom-checkbox mb-3">
+                                    {{ form.is_superuser }}
+                                    <label class="custom-control-label" for="customControlValidation3">ابر کاربر /
+                                        غیر ابر کاربر</label>
+                                </div>
+                                <small class="form-text text-muted">- نشان می‌دهد که این کاربر همهٔ اجازه‌ها را دارد
+                                    بدون آنکه به صراحت به او اختصاص داده شده باشد.
+                                </small>
+                            </div>
+                        </div>
+                        <hr>
+                        {% if address %}
+                            <p><strong>اطلاعات آدرس</strong></p>
+                            {% for address in address %}
+                                <div class="badge badge-secondary">
+                                    {{ forloop.counter }}
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label>نام و نام خانوادگی تحویل گیرنده</label>
+                                        <input readonly="readonly" type="text" class="form-control"
+                                               value="{{ address.full_name }}">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>شماره موبایل</label>
+                                        <input readonly="readonly" type="text" class="form-control"
+                                               value="{{ address.phone_number }}">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>استان</label>
+                                        <input readonly="readonly" type="text" class="form-control"
+                                               value="{{ address.province }}">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>شهر</label>
+                                        <input readonly="readonly" type="text" class="form-control"
+                                               value="{{ address.city }}">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>آدرس دقیق</label>
+                                        <input readonly="readonly" type="text" class="form-control"
+                                               value="{{ address.exact_address }}">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>پلاک</label>
+                                        <input readonly="readonly" type="text" class="form-control"
+                                               value="{{ address.plaque }}">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>کد پستی</label>
+                                        <input readonly="readonly" type="text" class="form-control"
+                                               value="{{ address.postal_code }}">
+                                    </div>
+                                </div>
+                                <hr>
+                                <p><strong>کد تخفیف های استفاده شده توسط کاربر</strong></p>
+                                {% if used_coupons %}
+                                    <div class="form-row">
+                                        {% for coupon in used_coupons %}
+                                            <div class="form-group col-md-3">
+                                                <label>{{ coupon.discount }} درصد تخفیف</label>
+                                                <input readonly="readonly" type="text" class="form-control"
+                                                       value=" کد : {{ coupon.code }}">
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-warning">
+                                        <p>کد تخفیفی یافت نشد</p>
+                                    </div>
+                                {% endif %}
+
+
+                            {% endfor %}
+                        {% else %}
+                            <div class="alert alert-warning">
+                                <p>هیچ آدرسی یافت نشد</p>
+                            </div>
+                        {% endif %}
+
+                        <button type="submit" class="btn btn-primary">ذخیره</button>
+                        <button class="btn btn-danger float-right" type="button" data-toggle="modal"
+                                data-target="#deleteModal">
+                            <span><i class="fe fe-trash-2"></i></span> حذف
+                        </button>
+                        <!-- Delete Confirmation Modal -->
+                        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+                             aria-labelledby="deleteModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteModalLabel">حذف کاربر</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        آیا از حذف این کاربر اطمینان دارید؟
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">بی‌خیال
+                                        </button>
+                                        <form id="delete-form" method="post"
+                                              action="{% url 'user_delete_admin_page' pk=current_user.id %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger">حذف</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div> <!-- /.card-body -->
+            </div> <!-- /.col-12 -->
+        </div> <!-- .row -->
+    </div>
+
+
+{% endblock %}

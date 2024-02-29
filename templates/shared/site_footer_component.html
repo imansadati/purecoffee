@@ -1,0 +1,47 @@
+<div class="pa-footer-two">
+    <div class="container">
+        <div class="row">
+            {% for box in footer_link_box %}
+                <div class="col-lg-3 col-md-6">
+                    <div class="pa-foot-box">
+                        <h2 class="pa-foot-title">{{ box.title }}</h2>
+                        <ul>
+                            {% for link in box.footerlink_set.all %}
+                                <li>
+                                    <a href="{{ link.url }}">{{ link.title }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="col-lg-6">
+                <div class="pa-foot-box pa-foot-subscribe">
+                    <div class="social-icons float-end">
+                        <p>با ما همراه باشید!</p>
+                        <a href="https://www.instagram.com/{{ social_medias.instagram }}" class="social-icon"><i
+                                class="fab fa-instagram"></i></a>
+                        <a href=http://t.me/{{ social_medias.telegram }}" class="social-icon"><i
+                                class="fab fa-telegram"></i></a>
+                        <a href="https://www.youtube.com/{{ social_medias.youtube }}" class="social-icon"><i
+                                class="fab fa-youtube"></i></a>
+                    </div>
+                    <img src="{{ site_setting.site_icon.url }}" alt="Logo" class="img-fluid"/>
+                </div>
+                <div class="float-end">
+                    <a referrerpolicy='origin' target='_blank'
+                       href='https://trustseal.enamad.ir/u?id=400196&Code=gVFuBdwibdTB6B5KOYtX9Z9kzzPWJ79A'>
+                        <img
+                                referrerpolicy='origin'
+                                src='https://trustseal.enamad.ir/logo.aspx?id=400196&Code=gVFuBdwibdTB6B5KOYtX9Z9kzzPWJ79A'
+                                alt='' style='cursor:pointer' Code='gVFuBdwibdTB6B5KOYtX9Z9kzzPWJ79A'></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="pa-copyright">
+    <div class="container">
+        <p>{{ site_setting.copyright }}</p>
+    </div>
+</div>

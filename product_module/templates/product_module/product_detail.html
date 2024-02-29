@@ -1,0 +1,236 @@
+{% extends 'shared/_layout.html' %}
+{% load poll_exteras %}
+{% load thumbnail %}
+{% load render_partial %}
+{% block header_refrences %}
+    <link rel="stylesheet" href="/static/lib/image_lightbox/css/lightbox.min.css">
+{% endblock %}
+{% block footer_refrences %}
+    <script src="/static/lib/image_lightbox/js/lightbox.min.js"></script>
+{% endblock %}
+
+{% block title %}
+    جزییات محصول
+{% endblock %}
+
+{% block content %}
+    <div class="pa-breadcrumb">
+        <div class="container-fluid">
+            <div class="pa-breadcrumb-box">
+                <h1>تک محصول</h1>
+                <ul>
+                    <li><a href="{% url 'home_page' %}">خانه</a></li>
+                    <li>تک محصول</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="pa-product-single spacer-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <div class="view-product">
+                                <div class="pa-prod-thumb-img">
+                                    {% thumbnail product.image "280x230" quality=98 crop="center" as im %}
+                                        <a href="{{ product.image.url }}" data-lightbox="product_image">
+                                            <img src="{{ im.url }}" alt="{{ product.title }}" class="img-fluid">
+                                        </a>
+                                    {% endthumbnail %}
+                                </div>
+                            </div>
+
+                            {% for product_image in product_gallery %}
+                                <div class="d-inline p-1">
+                                    {% thumbnail product_image.image "100x100" quality=98 crop="center" as im %}
+                                        <a href="{{ product_image.image.url }}" data-lightbox="product_image">
+                                            <img src="{{ im.url }}" alt="{{ product.title }}"
+                                                 class="img-fluid my-1 rounded-3">
+                                        </a>
+                                    {% endthumbnail %}
+                                </div>
+                            {% endfor %}
+
+
+                        </div>
+
+                        <div class="col-sm-7">
+                            <div class="pa-prod-content">
+                                <h2 class="pa-prod-title">{{ product.title }}</h2>
+                                <p class="pa-prod-price">
+                                    <span>قیمت : </span> {{ product.price | three_digits_currency }}</p>
+                                {#                                <span class="pa-offer-price">25% تخفیف</span>#}
+                                <a href="{% url 'product_category_list' cat=product_categories.url_title %}"
+                                   class="pa-prod-category"><span>دسته بندی : </span>{{ product_categories.title }}</a>
+                                <ul>
+                                    <li><span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-38 0 512 512.00142">
+                                            <path d="M 435.488281 138.917969 L 435.472656 138.519531 C 435.25 133.601562 435.101562 128.398438 435.011719 122.609375 C 434.59375 94.378906 412.152344 71.027344 383.917969 69.449219 C 325.050781 66.164062 279.511719 46.96875 240.601562 9.042969 L 240.269531 8.726562 C 227.578125 -2.910156 208.433594 -2.910156 195.738281 8.726562 L 195.40625 9.042969 C 156.496094 46.96875 110.957031 66.164062 52.089844 69.453125 C 23.859375 71.027344 1.414062 94.378906 0.996094 122.613281 C 0.910156 128.363281 0.757812 133.566406 0.535156 138.519531 L 0.511719 139.445312 C -0.632812 199.472656 -2.054688 274.179688 22.9375 341.988281 C 36.679688 379.277344 57.492188 411.691406 84.792969 438.335938 C 115.886719 468.679688 156.613281 492.769531 205.839844 509.933594 C 207.441406 510.492188 209.105469 510.945312 210.800781 511.285156 C 213.191406 511.761719 215.597656 512 218.003906 512 C 220.410156 512 222.820312 511.761719 225.207031 511.285156 C 226.902344 510.945312 228.578125 510.488281 230.1875 509.925781 C 279.355469 492.730469 320.039062 468.628906 351.105469 438.289062 C 378.394531 411.636719 399.207031 379.214844 412.960938 341.917969 C 438.046875 273.90625 436.628906 199.058594 435.488281 138.917969 Z M 384.773438 331.523438 C 358.414062 402.992188 304.605469 452.074219 220.273438 481.566406 C 219.972656 481.667969 219.652344 481.757812 219.320312 481.824219 C 218.449219 481.996094 217.5625 481.996094 216.679688 481.820312 C 216.351562 481.753906 216.03125 481.667969 215.734375 481.566406 C 131.3125 452.128906 77.46875 403.074219 51.128906 331.601562 C 28.09375 269.097656 29.398438 200.519531 30.550781 140.019531 L 30.558594 139.683594 C 30.792969 134.484375 30.949219 129.039062 31.035156 123.054688 C 31.222656 110.519531 41.207031 100.148438 53.765625 99.449219 C 87.078125 97.589844 116.34375 91.152344 143.234375 79.769531 C 170.089844 68.402344 193.941406 52.378906 216.144531 30.785156 C 217.273438 29.832031 218.738281 29.828125 219.863281 30.785156 C 242.070312 52.378906 265.921875 68.402344 292.773438 79.769531 C 319.664062 91.152344 348.929688 97.589844 382.246094 99.449219 C 394.804688 100.148438 404.789062 110.519531 404.972656 123.058594 C 405.0625 129.074219 405.21875 134.519531 405.453125 139.683594 C 406.601562 200.253906 407.875 268.886719 384.773438 331.523438 Z M 384.773438 331.523438 "></path>
+                                            <path d="M 217.996094 128.410156 C 147.636719 128.410156 90.398438 185.652344 90.398438 256.007812 C 90.398438 326.367188 147.636719 383.609375 217.996094 383.609375 C 288.351562 383.609375 345.59375 326.367188 345.59375 256.007812 C 345.59375 185.652344 288.351562 128.410156 217.996094 128.410156 Z M 217.996094 353.5625 C 164.203125 353.5625 120.441406 309.800781 120.441406 256.007812 C 120.441406 202.214844 164.203125 158.453125 217.996094 158.453125 C 271.785156 158.453125 315.546875 202.214844 315.546875 256.007812 C 315.546875 309.800781 271.785156 353.5625 217.996094 353.5625 Z M 217.996094 353.5625 "></path>
+                                            <path d="M 254.667969 216.394531 L 195.402344 275.660156 L 179.316406 259.574219 C 173.449219 253.707031 163.9375 253.707031 158.070312 259.574219 C 152.207031 265.441406 152.207031 274.953125 158.070312 280.816406 L 184.78125 307.527344 C 187.714844 310.460938 191.558594 311.925781 195.402344 311.925781 C 199.246094 311.925781 203.089844 310.460938 206.023438 307.527344 L 275.914062 237.636719 C 281.777344 231.769531 281.777344 222.257812 275.914062 216.394531 C 270.046875 210.523438 260.535156 210.523438 254.667969 216.394531 Z M 254.667969 216.394531 "></path>
+                                            </svg>
+                                    </span> آیورودای 100% خالص
+                                    </li>
+                                    <li><span>
+                                        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path
+                                                d="m336 336c-5.519531 0-10 4.480469-10 10s4.480469 10 10 10 10-4.480469 10-10-4.480469-10-10-10zm0 0"></path><path
+                                                d="m200 326c-5.515625 0-10-4.484375-10-10s4.484375-10 10-10c3.542969 0 7.28125 1.808594 10.816406 5.226562 3.96875 3.839844 10.300782 3.738282 14.140625-.234374 3.839844-3.96875 3.734375-10.296876-.234375-14.136719-5.074218-4.914063-10.152344-7.691407-14.722656-9.207031v-11.648438c0-5.523438-4.476562-10-10-10s-10 4.476562-10 10v11.71875c-11.640625 4.128906-20 15.246094-20 28.28125 0 16.542969 13.457031 30 30 30 5.511719 0 10 4.484375 10 10s-4.488281 10-10 10c-4.273438 0-8.886719-2.6875-12.988281-7.566406-3.550781-4.226563-9.859375-4.773438-14.085938-1.21875-4.230469 3.554687-4.773437 9.863281-1.222656 14.089844 5.347656 6.359374 11.632813 10.789062 18.296875 13.023437v11.671875c0 5.523438 4.476562 10 10 10s10-4.476562 10-10v-11.71875c11.636719-4.128906 20-15.246094 20-28.28125 0-16.542969-13.457031-30-30-30zm0 0"></path><path
+                                                d="m120 166c5.523438 0 10-4.476562 10-10v-40c0-5.523438-4.476562-10-10-10s-10 4.476562-10 10v40c0 5.523438 4.476562 10 10 10zm0 0"></path><path
+                                                d="m472 236v-80c0-27.570312-22.429688-50-50-50h-56v-76c0-16.542969-13.457031-30-30-30h-186c-16.542969 0-30 13.457031-30 30v36h-30c-16.542969 0-30 13.457031-30 30v10h-10c-27.570312 0-50 22.429688-50 50v306c0 27.570312 22.429688 50 50 50h306c24.144531 0 44.347656-17.203125 48.992188-40h17.007812c27.570312 0 50-22.429688 50-50v-26h10c16.542969 0 30-13.457031 30-30v-90c0-22.054688-17.945312-40-40-40zm20 40c0 11.046875-8.953125 20-20 20v-40c11.027344 0 20 8.972656 20 20zm-70-150c16.542969 0 30 13.457031 30 30v140h-46v-60c0-24.144531-17.203125-44.347656-40-48.992188v-61.007812zm-282-96c0-5.515625 4.484375-10 10-10h186c5.515625 0 10 4.484375 10 10v156h-46v-90c0-16.542969-13.457031-30-30-30h-130zm100 156v-100h30c5.515625 0 10 4.484375 10 10v90zm-60 0v-100h40v100zm-100-90c0-5.515625 4.484375-10 10-10h70v100h-80zm-30 30h10v60h-7.859375c-16.527344 0-32.140625-11.96875-32.140625-30 0-16.542969 13.457031-30 30-30zm306 366h-306c-16.542969 0-30-13.457031-30-30v-266.617188c8.941406 6.660157 20.171875 10.617188 32.140625 10.617188h303.859375c16.542969 0 30 13.457031 30 30v60h-70c-16.542969 0-30 13.457031-30 30v40c0 16.542969 13.457031 30 30 30h70v66c0 16.542969-13.457031 30-30 30zm96-70c0 16.542969-13.457031 30-30 30h-16v-56h46zm30-46h-166c-5.515625 0-10-4.484375-10-10v-40c0-5.515625 4.484375-10 10-10h156c7.136719 0 13.984375-1.867188 20-5.355469v55.355469c0 5.515625-4.484375 10-10 10zm0 0"></path><path
+                                                d="m422 336h-46c-5.523438 0-10 4.476562-10 10s4.476562 10 10 10h46c5.523438 0 10-4.476562 10-10s-4.476562-10-10-10zm0 0"></path></svg>
+                                    </span> نقدی هنگام تحویل موجود است
+                                    </li>
+                                    {% if product_grinds %}
+                                        <span>سایز آسیاب برای : </span>
+                                        <div class="my-2">
+                                            {% if product_grinds %}
+                                                {% for grind in product_grinds %}
+                                                    <button id="product-grind" class="btn my-1 choose-grind"
+                                                            value="{{ grind.title }}">{{ grind.title }}</button>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                    <li>
+                                        {% if product_colors %}
+                                            <p id="p-color">رنگ ها : </p>
+                                            <div class="colors">
+                                                <ul>
+                                                    {% for product_color in product_colors %}
+                                                        <li>
+                                                            <button class="btn btn-lg rounded choose-color"
+                                                                    data-color="{{ product_color.title }}"
+                                                                    style="background-color: {{ product_color.color }}"></button>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        {% endif %}
+                                    </li>
+                                    <li>
+                                        {% if product.availability_count %}
+                                            {% if product.availability_count <= 5 %}
+                                                <div class="alert alert-danger d-inline-block p-1 mt-3">
+                                                    <p>تعداد موجودی محصول : {{ product.availability_count }} عدد</p>
+                                                </div>
+                                            {% endif %}
+                                        {% elif not product_colors %}
+                                            <div class="alert alert-danger d-inline-block p-1 mt-3">
+                                                <p>ناموجود</p>
+                                            </div>
+                                        {% endif %}
+
+                                        {#                                        {% if not product_colors %}#}
+                                        {#                                            <div class="alert alert-danger d-inline-block p-1 mt-3">#}
+                                        {#                                                <p>ناموجود</p>#}
+                                        {#                                            </div>#}
+                                        {#                                        {% endif %}#}
+
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="pa-prod-content">
+                                <div class="pa-prod-count">
+                                    <div class="pa-cart-quantity">
+                                        <button class="pa-sub"></button>
+                                        <input onkeydown="return false" type="number" min="1" value="1"
+                                               id="product-count">
+                                        <button id="pa-add" class="pa-add"></button>
+                                    </div>
+                                    <input type="hidden" class="product-id-{{ product.id }}" value="{{ product.id }}">
+                                    <input type="hidden" id="color-id" class="color-id-{{ product.id }}"
+                                           value="{{ product.productcolor_set.first.title }}">
+                                    <input type="hidden" id="grind-id" class="grind-id-{{ product.id }}"
+                                           value="{{ product.grind.first.title }}">
+                                    <button class="pa-btn add-to-cart" data-index="{{ product.id }}">اضافه کردن به سبد
+                                    </button>
+                                </div>
+                                <p>{{ product.description|safe }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- product start -->
+                    {% if related_products %}
+                        <div class="pa-related-product">
+                            <div class="container">
+                                <div class="pa-heading">
+                                    <h1>محصولات مرتبط</h1>
+                                </div>
+                                <div class="row">
+                                    <div class="swiper-container swiper-container-horizontal swiper-container-rtl">
+                                        <div class="swiper-wrapper">
+                                            {% for product in related_products %}
+
+                                                <div class="swiper-slide swiper-slide-active">
+                                                    {% include 'includes/product_item_partial.html' %}
+                                                </div>
+
+                                            {% endfor %}
+                                        </div>
+                                        <!-- Add Arrows -->
+                                        {% if related_products|length > 1 %}
+                                            <div class="swiper-button-next" role="button"
+                                                 aria-label="Next slide"></div>
+                                            <div class="swiper-button-prev" role="button"
+                                                 aria-label="Previous slide"></div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <!-- product end -->
+                </div>
+                <div class="col-lg-4">
+                    <div class="pa-product-sidebar">
+
+                        {% render_partial 'product_module.views.product_category_component' %}
+
+                        <div class="pa-widget pa-product-widget">
+                            <h2 class="pa-sidebar-title">محصولات برتر</h2>
+                            <ul>
+                                {% for tproduct in top_products %}
+                                    <li>
+                                        <div class="pa-pro-wid-img">
+                                            <img src="{{ tproduct.product.image.url }}" alt="{{ tproduct.title }}"
+                                                 class="img-fluid">
+                                        </div>
+                                        <div class="pa-pro-wid-content">
+                                            <h4>
+                                                <a href="{{ tproduct.product.get_absolute_url }}">{{ tproduct.title }}</a>
+                                            </h4>
+                                            <p>{{ tproduct.product.short_description|safe }}</p>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+
+                            </ul>
+                        </div>
+                        <div class="pa-widget pa-tag">
+                            <h2 class="pa-sidebar-title">تگ ها</h2>
+                            <ul>
+                                {% for tag in product_tags %}
+                                    <li><a href="{% url 'product_tag_list' tag=tag.url_title %}">{{ tag.title }}</a>
+                                    </li>
+                                {% endfor %}
+
+                            </ul>
+                        </div>
+                        <div class="pa-widget">
+                            <h2 class="pa-sidebar-title">شبکه های اجتماعی</h2>
+                            <a href="https://www.instagram.com/{{ social_medias.instagram }}" class="social-icon"><i
+                                    class="fab fa-instagram"></i></a>
+                            <a href=http://t.me/{{ social_medias.telegram }}" class="social-icon"><i
+                                    class="fab fa-telegram"></i></a>
+                            <a href="https://www.youtube.com/{{ social_medias.youtube }}" class="social-icon"><i
+                                    class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

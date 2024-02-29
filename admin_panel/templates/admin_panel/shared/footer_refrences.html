@@ -1,0 +1,171 @@
+<script src="/static/admin_panel/js/jquery.min.js"></script>
+<script src="/static/admin_panel/js/popper.min.js"></script>
+<script src="/static/admin_panel/js/moment.min.js"></script>
+<script src="/static/admin_panel/js/bootstrap.min.js"></script>
+<script src="/static/admin_panel/js/simplebar.min.js"></script>
+<script src='/static/admin_panel/js/daterangepicker.js'></script>
+<script src='/static/admin_panel/js/jquery.stickOnScroll.js'></script>
+<script src="/static/admin_panel/js/tinycolor-min.js"></script>
+<script src="/static/admin_panel/js/config.js"></script>
+<script src="/static/admin_panel/js/d3.min.js"></script>
+<script src="/static/admin_panel/js/topojson.min.js"></script>
+<script src="/static/admin_panel/js/datamaps.all.min.js"></script>
+<script src="/static/admin_panel/js/datamaps-zoomto.js"></script>
+<script src="/static/admin_panel/js/datamaps.custom.js"></script>
+<script src="/static/admin_panel/js/Chart.min.js"></script>
+<script>
+    /* defind global options */
+    Chart.defaults.global.defaultFontFamily = base.defaultFontFamily;
+    Chart.defaults.global.defaultFontColor = colors.mutedColor;
+</script>
+<script src="/static/admin_panel/js/gauge.min.js"></script>
+<script src="/static/admin_panel/js/jquery.sparkline.min.js"></script>
+<script src="/static/admin_panel/js/apexcharts.min.js"></script>
+<script src="/static/admin_panel/js/apexcharts.custom.js"></script>
+<script src='/static/admin_panel/js/jquery.mask.min.js'></script>
+<script src='/static/admin_panel/js/select2.min.js'></script>
+<script src='/static/admin_panel/js/jquery.steps.min.js'></script>
+<script src='/static/admin_panel/js/jquery.validate.min.js'></script>
+<script src='/static/admin_panel/js/jquery.timepicker.js'></script>
+<script src='/static/admin_panel/js/dropzone.min.js'></script>
+<script src='/static/admin_panel/js/uppy.min.js'></script>
+<script src='/static/admin_panel/js/quill.min.js'></script>
+<script src="/static/admin_panel/js/time.js"></script>
+<script src="/static/admin_panel/js/apps.js"></script>
+<script src="/static/admin_panel/js/jalalidatepicker.min.js"></script>
+<script src="/static/admin_panel/js/jalali-moment.min.js"></script>
+<script src="/static/admin_panel/js/persian-datepicker.min.js"></script>
+<script src="/static/admin_panel/js/persian-date.min.js"></script>
+<script src="/static/admin_panel/js/django-jalali.min.js"></script>
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-56159088-1"></script>
+
+<script>
+    var validToInput = document.getElementById('id_valid_to'); // Replace 'id_valid_to' with the actual ID of the 'valid_to' input field
+    var validFromInput = document.getElementById('id_valid_from'); // Replace 'id_valid_to' with the actual ID of the 'valid_to' input field
+    if (validToInput) {
+        validToInput.classList.add('form-control');
+        validFromInput.classList.add('form-control');
+    }
+</script>
+
+<script>
+    var uptarg = document.getElementById('drag-drop-area');
+    if (uptarg) {
+        var uppy = Uppy.Core().use(Uppy.Dashboard,
+            {
+                inline: true,
+                target: uptarg,
+                proudlyDisplayPoweredByUppy: false,
+                theme: 'dark',
+                width: 770,
+                height: 210,
+                plugins: ['Webcam']
+            }).use(Uppy.Tus,
+            {
+                endpoint: 'https://master.tus.io/files/'
+            });
+        uppy.on('complete', (result) => {
+            console.log('Upload complete! We’ve uploaded these files:', result.successful)
+        });
+    }
+</script>
+
+
+{% comment %}document.addEventListener('DOMContentLoaded', function () {
+        // Initialize the PersianDatePicker
+        var persianDatePicker = $("#persian-date-picker").persianDatepicker({
+            observer: true,
+        });
+
+        // Add an observer to detect changes in the PersianDatePicker field
+        persianDatePicker.on('click', function () {
+            var persianDate = persianDatePicker.getDate('YYYY/MM/DD');
+
+            // Convert Persian (Jalali) date to Gregorian date using jalali-moment
+            var gregorianDate = moment.from(persianDate, 'fa', 'YYYY/MM/DD').format('YYYY-MM-DD');
+
+            // Update the hidden Gregorian date input field
+            $('#gregorian-date').val(gregorianDate);
+        });
+    });{% endcomment %}
+{% comment %}   document.addEventListener('DOMContentLoaded', function () {
+           // Initialize the PersianDatePicker
+           var persianDatePicker = $("#persian-date-picker").persianDatepicker({
+               altField: '#gregorian-date',
+               observer: true,
+               altFormat: 'YYYY-MM-DD',
+           });
+
+           // Add an observer to detect changes in the PersianDatePicker field
+           persianDatePicker.on('change', function () {
+               var persianDate = persianDatePicker.getDate('YYYY/MM/DD');
+               var gregorianDate = persianDatePicker.getDate('YYYY-MM-DD');
+
+               // You can use persianDate or gregorianDate as needed
+               document.getElementById('gregorian-date').value = gregorianDate;
+               console.log('Persian Date:', persianDate);
+               console.log('Gregorian Date:', gregorianDate);
+           });
+       });{% endcomment %}
+{% comment %} $(document).ready(function () {
+         var picker = $("#persianDateInput").persianDatepicker({
+             format: "YYYY-MM-DD HH:MM",
+             observer: true,
+             autoClose: true,
+         });
+
+         // Set the initial date to the current date
+         var now = new persianDate().format("YYYY-MM-DD");
+         picker.setDate(now);
+
+     });{% endcomment %}
+{% comment %}  $(document).ready(function () {
+          var picker = $("#persianDateInput").persianDatepicker({
+              format: "YYYY-MM-DD HH:MM",
+              observer: true,
+              autoClose: true,
+          });
+
+          // Set the initial date to the current date in the Persian calendar
+          var nowPersian = new persianDate();
+          picker.setDate(nowPersian.format("YYYY-MM-DD HH:MM"));
+
+          // Listen for changes in the picker value and update the field accordingly
+          picker.onChange(function () {
+              var selectedDate = picker.getDate("YYYY-MM-DD HH:MM");
+              $("#persianDateInput").val(selectedDate);
+          });
+      });{% endcomment %}
+{#<script>#}
+{#    $('.persian-datepicker').persianDatepicker({#}
+{#        format: 'YYYY-MM-DD HH:mm:ss',#}
+{#        minDate: new persianDate().unix()#}
+{#    });#}
+{#</script>#}
+
+<script>
+    jalaliDatepicker.startWatch({
+        minDate: "attr",
+        maxDate: "attr"
+    });
+    /* Below is a js demo | you don't need to use */
+    setTimeout(function () {
+        var elm = document.getElementById("search-date")[0];
+        elm.focus();
+        jalaliDatepicker.hide();
+        jalaliDatepicker.show(elm);
+    }, 1000);
+</script>
+
+<script>
+    $(document).ready(function () {
+        // Attach a click event handler to the button
+        $("#printButton").click(function () {
+            // Trigger printing when the button is clicked
+            window.print();
+        });
+    });
+</script>

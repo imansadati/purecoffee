@@ -1,0 +1,377 @@
+{% extends 'admin_panel/shared/_admin_layout.html' %}
+{% load thumbnail %}
+{% load poll_exteras %}
+
+{% block title %}
+    صفحه اصلی
+{% endblock %}
+
+
+{% block content %}
+
+
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12">
+
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        {% if not monthly_sales == None %}
+                                            <span class="h2 mb-0">{{ monthly_sales.total_sales|three_digits_currency }}</span>
+                                        {% else %}
+                                            <span class="h2 mb-0">0</span>
+                                        {% endif %}
+                                        <p class="small text-muted mb-0">فروش ماهانه</p>
+                                        {% if percentage_change_sales > 0 %}
+                                            <span class="badge badge-pill badge-success">{{ percentage_change_sales|floatformat:2 }} %</span>
+                                        {% else %}
+                                            <span class="badge badge-pill badge-warning">{{ percentage_change_sales|floatformat:2 }} %</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-auto">
+                                        <span class="fe fe-32 fe-shopping-bag text-muted mb-0"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <span class="h2 mb-0">{{ all_orders }}</span>
+                                        <p class="small text-muted mb-0">کل سفارشات</p>
+                                        {% if percentage_change_orders > 0 %}
+                                            <span class="badge badge-pill badge-success">{{ percentage_change_orders|floatformat:2 }} %</span>
+                                        {% else %}
+                                            <span class="badge badge-pill badge-warning">{{ percentage_change_orders|floatformat:2 }} %</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-auto">
+                                        <span class="fe fe-32 fe-clipboard text-muted mb-0"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <span class="h2 mb-0">{{ all_users }}</span>
+                                        <p class="small text-muted mb-0">کاربران</p>
+                                        {% if percentage_change_users > 0 %}
+                                            <span class="badge badge-pill badge-success">{{ percentage_change_users|floatformat:2 }} %</span>
+                                        {% else %}
+                                            <span class="badge badge-pill badge-warning">{{ percentage_change_users|floatformat:2 }} %</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-auto">
+                                        <span class="fe fe-32 fe-users text-muted mb-0"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row align-items-center my-2">
+                    <div class="col-auto ml-auto">
+                        <div class="px-2 py-2 text-muted">
+                            <span class="small">{{ persian_date }}</span>
+                            <i class="fe fe-calendar fe-16 mx-2"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow">
+                            <div class="card-header">
+                                <span class="card-title">تعداد سفارشات امروز</span>
+                                <a class="float-right small text-muted" href="#!"><i
+                                        class="fe fe-more-vertical fe-12"></i></a>
+                            </div>
+                            <div class="card-body my-n2">
+                                <div class="d-flex">
+                                    <div class="flex-fill">
+                                        <h4 class="mb-0">{{ today_orders }}</h4>
+                                    </div>
+                                    <div class="flex-fill text-right">
+                                        <p class="mb-0 small">{{ orders_yesterday_today|floatformat:2 }} %</p>
+                                        <p class="text-muted mb-0 small">از دیروز</p>
+                                    </div>
+                                </div>
+                            </div> <!-- .card-body -->
+                        </div> <!-- .card -->
+                    </div> <!-- .col -->
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow mb-4">
+                            <div class="card-header">
+                                <span class="card-title">تعداد کاربران امروز</span>
+                                <a class="float-right small text-muted" href="#!"><i
+                                        class="fe fe-more-vertical fe-12"></i></a>
+                            </div>
+                            <div class="card-body my-n2">
+                                <div class="d-flex">
+                                    <div class="flex-fill">
+                                        <h4 class="mb-0">{{ today_users }}</h4>
+                                    </div>
+                                    <div class="flex-fill text-right">
+                                        <p class="mb-0 small">{{ percentage_change_users_yesterday_today|floatformat:2 }}
+                                            %</p>
+                                        <p class="text-muted mb-0 small">از دیروز</p>
+                                    </div>
+                                </div>
+                            </div> <!-- .card-body -->
+                        </div> <!-- .card -->
+                    </div> <!-- .col -->
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow mb-4">
+                            <div class="card-header">
+                                <span class="card-title">تعداد پیام های امروز</span>
+                                <a class="float-right small text-muted" href="#!"><i
+                                        class="fe fe-more-vertical fe-12"></i></a>
+                            </div>
+                            <div class="card-body my-n2">
+                                <div class="d-flex">
+                                    <div class="flex-fill">
+                                        <h4 class="mb-0">{{ today_messages }}</h4>
+                                    </div>
+                                    <div class="flex-fill text-right">
+                                        <p class="mb-0 small">{{ percentage_change_messages_yesterday_today|floatformat:2 }}
+                                            %</p>
+                                        <p class="text-muted mb-0 small">از دیروز</p>
+                                    </div>
+                                </div>
+                            </div> <!-- .card-body -->
+                        </div> <!-- .card -->
+                    </div> <!-- .col -->
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow mb-4">
+                            <div class="card-header">
+                                <span class="card-title">تعداد بازدید های امروز</span>
+                                <a class="float-right small text-muted" href="#!"><i
+                                        class="fe fe-more-vertical fe-12"></i></a>
+                            </div>
+                            <div class="card-body my-n2">
+                                <div class="d-flex">
+                                    <div class="flex-fill">
+                                        <h4 class="mb-0">{{ today_users }}</h4>
+                                    </div>
+                                    <div class="flex-fill text-right">
+                                        <p class="mb-0 small">{{ percentage_change_users_yesterday_today|floatformat:2 }}
+                                            %</p>
+                                        <p class="text-muted mb-0 small">از دیروز</p>
+                                    </div>
+                                </div>
+                            </div> <!-- .card-body -->
+                        </div> <!-- .card -->
+                    </div> <!-- .col -->
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card shadow mb-4">
+                            <div class="card-header">
+                                <strong class="card-title">بیشترین محصولات خریداری شده</strong>
+                                <a class="float-right small text-muted"
+                                   href="{% url 'top_selling_products_admin_page' %}">مشاهده بیشتر</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group list-group-flush my-n3">
+                                    {% for product in top_products %}
+                                        <div class="list-group-item">
+                                            <div class="row align-items-center">
+                                                <div class="col-3 col-md-2">
+                                                    {% thumbnail product.image "32x32" quality=98 crop="center" as im %}
+                                                        <img src="{{ im.url }}" class="thumbnail-sm"
+                                                             alt="{{ product.title }}">
+                                                    {% endthumbnail %}
+                                                </div>
+                                                <div class="col">
+                                                    <strong>{{ product.title }}</strong>
+                                                    <div class="my-0 text-muted small">موجودی
+                                                        : {{ product.availability_count }}</div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <strong>{{ product.order_count }}</strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+
+                                </div> <!-- / .list-group -->
+                            </div> <!-- / .card-body -->
+                        </div> <!-- .card -->
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card shadow mb-4">
+                            <div class="card-header">
+                                <strong class="card-title">برترین مقالات</strong>
+                                <a class="float-right small text-muted"
+                                   href="{% url 'most_viewed_articles_admin_page' %}">مشاهده بیشتر</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group list-group-flush my-n3">
+                                    {% for article in top_articles %}
+                                        <div class="list-group-item">
+                                            <div class="row align-items-center">
+                                                <div class="col-3 col-md-2">
+                                                    {% thumbnail article.image "32x32" quality=98 crop="center" as im %}
+                                                        <img src="{{ im.url }}" class="thumbnail-sm"
+                                                             alt="{{ article.title }}">
+                                                    {% endthumbnail %}
+                                                </div>
+                                                <div class="col">
+                                                    <strong>{{ article.title }}</strong>
+                                                    {% if article.is_active %}
+                                                        <div class="my-0 text-muted small">فعال</div>
+                                                    {% else %}
+                                                        <div class="my-0 text-muted small">غیر فعال</div>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-auto">
+                                                    <strong>{{ article.visit_count }}</strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+
+                                </div> <!-- / .list-group -->
+                            </div> <!-- / .card-body -->
+                        </div> <!-- .card -->
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card shadow mb-4">
+                            <div class="card-header">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h3 class="h6 mb-0">بیشترین استان های موجود</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group list-group-flush my-n3">
+                                    {% for province in top_provinces %}
+                                        <div class="list-group-item">
+                                            <div class="row align-items-center">
+                                                <div class="col">
+                                                    <strong>{{ province.province }}</strong>
+                                                    <div class="my-0 text-muted small">{{ province.city.title }}</div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <strong>{{ province.count }}</strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+
+                                </div> <!-- / .list-group -->
+                            </div> <!-- / .card-body -->
+                        </div> <!-- .card -->
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <h5 class="card-title">کاربران با خرید بالا</h5>
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>شناسه</th>
+                                        <th>نام و نام خانوادگی</th>
+                                        <th>شماره موبایل</th>
+                                        <th>تاریخ پیوستن</th>
+                                        <th>ایمیل</th>
+                                        <th>دفعات خرید</th>
+                                        <th>مشاهده کاربر</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for user in users_high_purchases %}
+                                        <tr>
+                                            <td>{{ user.id }}</td>
+                                            <td>{{ user.full_name }}</td>
+                                            <td>{{ user.username }}</td>
+                                            <td>{{ user.date_joined|show_jalali_date }}</td>
+                                            <td>{{ user.email }}</td>
+                                            <td><span class="badge badge-pill badge-success">{{ user.count }}</span>
+                                            </td>
+                                            <td><a href="{% url 'edit_user_admin_page' pk=user.pk %}"><span class="text-muted"><i
+                                                    class="fe fe-eye"></i></span></a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if latest_orders %}
+                    <div class="row">
+                        <!-- Recent orders -->
+                        <div class="col-md-12">
+                            <h6 class="mb-3">آخرین سفارشات</h6>
+                            <table class="table table-borderless table-striped">
+                                <thead>
+                                <tr role="row">
+                                    <th>شناسه</th>
+                                    <th>تاریخ پرداخت</th>
+                                    <th>نام و نام خانوادگی</th>
+                                    <th>شماره تماس</th>
+                                    <th>آدرس</th>
+                                    <th>وضعیت</th>
+                                    <th>مشاهده</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for order in latest_orders %}
+                                    <tr>
+                                        <th scope="col">{{ order.id }}</th>
+                                        <td>{{ order.payment_date|show_jalali_date }}</td>
+                                        <td>{{ order.address.full_name }}</td>
+                                        <td>{{ order.address.phone_number }}</td>
+                                        <td>{{ order.address.exact_address }}</td>
+                                        {% if order.status == 'انتظار' %}
+                                            <td><span
+                                                    class="badge badge-pill font-weight-bold badge-warning">{{ order.status }}</span>
+                                            </td>
+                                        {% elif order.status == 'ارسال شده' %}
+                                            <td><span
+                                                    class="badge badge-pill font-weight-bold badge-success">{{ order.status }}</span>
+                                            </td>
+                                        {% else %}
+                                            <td><span
+                                                    class="badge badge-pill font-weight-bold badge-info">{{ order.status }}</span>
+                                            </td>
+                                        {% endif %}
+                                        <td>
+                                            <a href="{% url 'edit_order_admin_page' pk=order.pk %}"><span
+                                                    class="text-muted"><i class="fe fe-eye"></i></span></a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div> <!-- / .col-md-3 -->
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

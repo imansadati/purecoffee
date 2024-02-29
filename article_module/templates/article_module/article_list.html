@@ -1,0 +1,96 @@
+{% extends 'shared/_layout.html' %}
+{% load render_partial %}
+{% block title %}
+    لیست مقالات
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="pa-breadcrumb">
+        <div class="container-fluid">
+            <div class="pa-breadcrumb-box">
+                <h1>صفحه مقالات</h1>
+                <ul>
+                    <li><a href="{% url 'home_page' %}">خانه</a></li>
+                    <li>مقالات</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="pa-blog-page spacer-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="row">
+
+                        {% if articles %}
+
+                            {% for article in articles %}
+                                <div class="col-md-6">
+                                    {% include 'includes/article_item_partial.html' %}
+                                </div>
+                            {% endfor %}
+
+                            <ul class="pagination d-block">
+                                {% if page_obj.has_previous %}
+                                    <li><a href="?page={{ page_obj.previous_page_number }}">قبلی</a></li>
+                                {% endif %}
+                                {% for pageNumber in paginator.page_range %}
+                                    <li class="{% if pageNumber == page_obj.number %}active{% endif %}"><a
+                                            href="?page={{ pageNumber }}">{{ pageNumber }}</a>
+                                    </li>
+                                {% endfor %}
+                                {% if page_obj.has_next %}
+                                    <li><a href="?page={{ page_obj.next_page_number }}">بعدی</a></li>
+                                {% endif %}
+                            </ul>
+
+                        {% else %}
+                            <div class="alert alert-warning">
+                                <p>هیچ مقاله ای یافت نشد.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="pa-blog-sidebar">
+
+                        {% render_partial 'article_module.views.article_category_component' %}
+
+                        <div class="pa-widget pa-product-widget">
+                            <h2 class="pa-sidebar-title">مقالات برتر</h2>
+                            <ul>
+
+                                {% for article in top_articles %}
+                                    <li>
+                                        <div class="pa-pro-wid-img">
+                                            <img src="{{ article.article.image.url }}" alt="{{ article.article.title }}"
+                                                 class="img-fluid">
+                                        </div>
+                                        <div class="pa-pro-wid-content">
+                                            <h4><a href="{{ article.article.get_absolute_url }}">{{ article.title }}</a></h4>
+                                            <p>{{ article.short_description | safe }}</p>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+
+
+                            </ul>
+                        </div>
+                        <div class="pa-widget">
+                            <h2 class="pa-sidebar-title">شبکه های اجتماعی</h2>
+                            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

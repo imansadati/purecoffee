@@ -1,0 +1,10 @@
+<div class="pa-widget pa-shop-category">
+    <h2 class="pa-sidebar-title">دسته بندی </h2>
+    <ul>
+        {% for product_category in product_categories %}
+            <li><a href="{% url 'product_category_list' cat=product_category.url_title %}">{{ product_category.title }}
+                <span>{{ product_category.products_count }}</span></a></li>
+        {% endfor %}
+
+    </ul>
+</div>

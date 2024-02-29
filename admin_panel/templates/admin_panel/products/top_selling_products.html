@@ -1,0 +1,48 @@
+{% extends 'admin_panel/shared/_admin_layout.html' %}
+{% load poll_exteras %}
+{% block title %}
+    بیشترین محصولات خریداری شده
+{% endblock %}
+
+{% block content %}
+
+    <div class="card shadow">
+        <div class="card-body">
+            <!-- table -->
+            <table class="table table-hover table-borderless border-v">
+                <h2 class="h4 mb-1">بیشترین محصولات خریداری شده</h2>
+                <p class="mb-3">در اینجا 15 محصول نشان داده میشود</p>
+                <thead class="thead-dark">
+                <tr>
+                    <th>شناسه محصول</th>
+                    <th>نام محصول</th>
+                    <th>قیمت محصول</th>
+                    <th>تعداد فروش</th>
+                    <th>وضعیت</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for product in top_selling_products %}
+                    <tr>
+                        <td>{{ product.id }}</td>
+                        <td>{{ product.title }}</td>
+                        <td>{{ product.price|three_digits_currency }}</td>
+                        <td><span
+                                class="badge font-weight-bold badge-success mr-2">{{ product.order_count }}</span><small
+                                class="text-muted">خریداری شده</small>
+                        </td>
+                        {% if product.status %}
+                            <td><span class="badge badge-success mr-2">موجود</span></td>
+                        {% else %}
+                            <td><span class="badge badge-pill badge-danger mr-2">ناموجود</span></td>
+                        {% endif %}
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

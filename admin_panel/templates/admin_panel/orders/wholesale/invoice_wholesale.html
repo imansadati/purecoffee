@@ -1,0 +1,95 @@
+{% extends 'admin_panel/shared/_admin_layout.html' %}
+{% load poll_exteras %}
+{% block title %}
+    صورتحساب فروش عمده
+{% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10 col-xl-8">
+                <div class="row align-items-center mb-4">
+                    <div class="col">
+                        <h2 class="h5 page-title"><small
+                                class="text-uppercase">صورتحساب (عمده)</small><br>{{ wholesale.id }} #</h2>
+                    </div>
+                    <div class="col-auto">
+                        <button id="printButton" type="button" class="btn btn-secondary">چاپ</button>
+                    </div>
+                </div>
+                <div class="card shadow">
+                    <div class="card-body p-5">
+                        <div class="row mb-5">
+                            <div class="col-12 text-center mb-4">
+                                <img id="logopure" src="{{ site_setting.site_icon_circle.url }}"
+                                     class="navbar-brand-img mx-auto mb-4"
+                                     alt="...">
+                                <h2 class="mb-0 text-uppercase">صورتحساب</h2>
+                                <p>{{ site_setting.site_name }}<br> {{ site_setting.site_name_title }}
+                                </p>
+                            </div>
+                            <div class="col-md-7">
+                                <p class="small text-uppercase mb-2">فاکتور از</p>
+                                <p class="mb-4">
+                                    <strong>{{ site_setting.site_name }}</strong><br>{{ site_setting.site_name_title }}<br>{{ site_setting.phone_number }}<br>تهران<br>
+                                    www.purecoffee.ir<br>
+                                </p>
+                                <p>
+                                    <span class="text-uppercase">صوتحساب </span><br>
+                                    <strong>{{ wholesale.id }} #</strong>
+                                </p>
+                            </div>
+                            <div class="col-md-5">
+                                <p class="small text-uppercase mb-2">فاکتور به</p>
+                                <p class="mb-4">
+                                    آقای/خانم
+                                    <strong> {{ wholesale.full_name }}</strong><br>{{ wholesale.company_name }}<br>فروش
+                                    عمده<br>{{ wholesale.phone_number }}<br>{{ wholesale.landline_phone }}<br>
+                                    {{ wholesale.full_address }}
+                                </p>
+                                <p>
+                                    <span class="text-uppercase">تاریخ صورتحساب</span><br>
+                                    <strong>{{ wholesale.order_date|show_jalali_date }}</strong>
+                                </p>
+                            </div>
+
+                        </div> <!-- /.row -->
+                        <hr>
+                        <div class="row">
+                            <p><strong>اطلاعات سفارش</strong></p>
+                            <div class="col-md-12 mb-4">
+                                {{ wholesale.product|safe }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row mt-5">
+                            <div class="col-md-2 text-center">
+                                <p>
+                                    محل مهر و امضای <br><strong>{{ site_setting.site_name }}</strong>
+                                </p>
+                            </div>
+                            <div class="col-md-10">
+                                <div id="pricesection" class="text-right mr-2">
+                                    <p class="mb-2 h6">
+                                        <span> جمع مبلغ قابل پرداخت : </span>
+                                        <strong>{{ wholesale.total_amount_payable|three_digits_currency }}</strong>
+                                    </p>
+                                    <p class="mb-2 h6">
+                                        <span>بیانه : </span>
+                                        <strong>{{ wholesale.statement|three_digits_currency }}</strong>
+                                    </p>
+                                    <p class="mb-2 h6">
+                                        <span>جمع مبلغ پرداخت شده : </span>
+                                        <span>{{ wholesale.total_amount_paid|three_digits_currency }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div> <!-- /.row -->
+                    </div> <!-- /.card-body -->
+                </div> <!-- /.card -->
+            </div> <!-- /.col-12 -->
+        </div> <!-- .row -->
+    </div>
+
+{% endblock %}

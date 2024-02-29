@@ -1,0 +1,282 @@
+{% extends 'admin_panel/shared/_admin_layout.html' %}
+{% load poll_exteras %}
+{% block title %}
+    جزییات سفارش
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class=" alert alert-{{ message.tags }}" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="close"><span
+                                aria-hidden="true">&times;</span></button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <strong class="card-title">جزییات سفارش</strong>
+                </div>
+                <div class="card-body">
+                    <form enctype="multipart/form-data" method="post"
+                          action="{% url 'edit_order_admin_page' pk=current_order.id %}"
+                          novalidate="">
+                        {% csrf_token %}
+                        <p><strong>اطلاعات کاربر</strong></p>
+                        <div class="form-row">
+                            <div class="col-md-4 mb-3">
+                                <label>نام و نام خانوادگی کاربر</label>
+                                <input readonly class="form-control" type="text"
+                                       value="{{ current_order.user.full_name }}">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>شماره موبایل کاربر</label>
+                                <input readonly class="form-control" type="text"
+                                       value="{{ current_order.user.phone_number }}">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>تعداد دفعات خرید این کاربر</label>
+                                <input readonly class="form-control" type="text" value="{{ users_purchases.count }}">
+                            </div>
+                        </div>
+                        <p><strong>اطلاعات آدرس</strong></p>
+                        {% if current_order.address %}
+                            <div class="row">
+                                <div class="form-group col-md-3 mb-4">
+                                    <label>نام و نام خانوادگی تحویل گیرنده</label>
+                                    <input readonly class="form-control" type="text"
+                                           value="{{ form.instance.address.full_name }}">
+                                </div>
+                                <div class="form-group col-md-3 mb-4">
+                                    <label>شماره موبایل تحویل گیرنده</label>
+                                    <input readonly class="form-control" type="text"
+                                           value="{{ form.instance.address.phone_number }}">
+                                </div>
+                                <div class="form-group col-md-3 mb-4">
+                                    <label>استان</label>
+                                    <input readonly class="form-control" type="text"
+                                           value="{{ form.instance.address.province }}">
+                                </div>
+                                <div class="form-group col-md-3 mb-4">
+                                    <label>شهر</label>
+                                    <input readonly class="form-control" type="text"
+                                           value="{{ form.instance.address.city }}">
+                                </div>
+                                <div class="form-group col-md-6 mb-4">
+                                    <label>آدرس دقیق</label>
+                                    <input readonly class="form-control" type="text"
+                                           value="{{ form.instance.address.exact_address }}">
+                                </div>
+                                <div class="form-group col-md-3 mb-4">
+                                    <label>پلاک</label>
+                                    <input readonly class="form-control" type="text"
+                                           value="{{ form.instance.address.plaque }}">
+                                </div>
+                                <div class="form-group col-md-3 mb-4">
+                                    <label>کد پستی</label>
+                                    <input readonly class="form-control" type="text"
+                                           value="{{ form.instance.address.postal_code }}">
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class=" alert alert-warning">
+                                <p>هیچ آدرسی وجود ندارد.</p>
+                            </div>
+                        {% endif %}
+                        <p><strong>اطلاعات سفارش</strong></p>
+                        {% if order_detail %}
+                            <div class="col-md-12 my-4">
+                                <div class="card shadow">
+                                    <div class="card-body">
+                                        <h5 class="card-title">محصولات</h5>
+                                        <p class="card-text">تمامی محصولات سفارش داده
+                                            شده <strong>{{ current_order.user.full_name }}</strong> در اینجا آمده
+                                            است
+                                        </p>
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                            <tr class="bg-primary-lighter">
+                                                <th>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                               id="chall">
+                                                        <label class="custom-control-label" for="d1"></label>
+                                                    </div>
+                                                </th>
+                                                <th><strong>شناسه</strong></th>
+                                                <th><strong>محصول</strong></th>
+                                                <th><strong>رنگ محصول</strong></th>
+                                                <th><strong>آسیاب محصول</strong></th>
+                                                <th><strong>تعداد</strong></th>
+                                                <th><strong>قیمت نهایی تکی محصول</strong></th>
+                                                <th><strong>عملیات</strong></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            {% for orderd in order_detail %}
+                                                <tr>
+                                                    <td>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   id="{{ orderd.id }}">
+                                                            <label class="custom-control-label"
+                                                                   for="{{ orderd.id }}"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{ orderd.id }}</td>
+                                                    <td>{{ orderd.product.title }}</td>
+                                                    <td>{{ orderd.color.title }}</td>
+                                                    <td>{{ orderd.grind.title }}</td>
+                                                    <td>{{ orderd.count }}</td>
+                                                    <td>{{ orderd.final_price | three_digits_currency }}</td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-sm dropdown-toggle" type="button"
+                                                                    id="dr1" data-toggle="dropdown"
+                                                                    aria-haspopup="true"
+                                                                    aria-expanded="false">
+                                                                <span class="text-muted sr-only">Action</span>
+                                                            </button>
+                                                            <div class="dropdown-menu dropdown-menu-left"
+                                                                 aria-labelledby="dr1">
+                                                                <a class="dropdown-item"
+                                                                   href="{{ orderd.get_absolute_url_admin }}">مشاهده
+                                                                    محصول</a>
+                                                                <a class="dropdown-item"
+                                                                   href="{% url 'edit_user_admin_page' pk=current_order.user.id %}">مشاهده
+                                                                    کاربر</a>
+                                                                <button class="dropdown-item btn float-right"
+                                                                        type="button"
+                                                                        data-toggle="modal"
+                                                                        data-target="#deleteModal"> حذف
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <!-- Delete Confirmation Modal -->
+                                                <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+                                                     aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="deleteModalLabel">حذف
+                                                                    سفارش</h5>
+                                                                <button type="button" class="close"
+                                                                        data-dismiss="modal"
+                                                                        aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                آیا از حذف این سفارش اطمینان دارید؟
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-dismiss="modal">بی‌خیال
+                                                                </button>
+                                                                <a class="btn btn-danger"
+                                                                   href="{% url 'order_detail_delete_admin_page' pk=orderd.pk %}">حذف</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class=" alert alert-warning">
+                                <p>هیچ محصولی یافت نشد.</p>
+                            </div>
+                        {% endif %}
+                        <div class="row">
+                            <div class="col-md-3 mb-4">
+                                <label>وضعیت سفارش</label>
+                                {{ form.status }}
+                            </div>
+                            <div class="col-md-3 mb-4">
+                                <label>تاریخ پرداخت</label>
+                                {{ form.payment_date }}
+                                <span>{{ current_order.payment_date|show_jalali_date }}</span>
+                            </div>
+                            <div class="col-md-3 mb-4">
+                                <label>قیمت کل</label>
+                                <input class="form-control" readonly type="text"
+                                       value="{{ current_order.total_amount | three_digits_currency }}">
+                            </div>
+                            <div class="col-md-3 mb-4">
+                                <label>قیمت نهایی پرداخت شده</label>
+                                <input type="text"
+                                       value="{{ current_order.payable_amount | three_digits_currency }}"
+                                       class="form-control" readonly>
+                                {% if current_order.transaction_amount %}
+                                    <span>مبلغ استفاده شده از کیف پول : {{ current_order.transaction_amount | three_digits_currency }}</span>
+                                {% else %}
+                                    <span><span>مبلغ استفاده شده از کیف پول : 0 تومان</span></span>
+                                {% endif %}
+                                {% if current_order.coupon %}
+                                    <div>
+                                        <p>کد تخفیف استفاده شده : {{ current_order.coupon }}</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="custom-control custom-checkbox mb-4">
+                            {{ form.is_paid }}
+                            <label class="custom-control-label" for="customControlValidation1">نهایی شده /
+                                نشده</label>
+                        </div>
+                        <button class="btn btn-primary" type="submit">ذخیره</button>
+                    </form>
+                    <button class="btn btn-danger float-right" type="button" data-toggle="modal"
+                            data-target="#deleteModal">
+                        <span><i class="fe fe-trash-2"></i></span> حذف
+                    </button>
+                    <a href="{% url 'order_invoice_admin_page' pk=current_order.id %}">
+                        <button class="btn mx-5 btn-primary float-right" type="button">
+                            <span><i class="fe fe-file-text"></i></span> مشاهده صورتحساب
+                        </button>
+                    </a>
+
+                    <!-- Delete Confirmation Modal -->
+                    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+                         aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel">حذف سفارش</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    آیا از حذف این سفارش اطمینان دارید؟
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بی‌خیال
+                                    </button>
+                                    <form id="delete-form" method="post"
+                                          action="{% url 'order_delete_admin_page' pk=current_order.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">حذف</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- /.card-body -->
+            </div> <!-- /.card -->
+        </div>
+    </div>
+
+{% endblock %}

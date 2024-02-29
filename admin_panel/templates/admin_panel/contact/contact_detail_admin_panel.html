@@ -1,0 +1,102 @@
+{% extends 'admin_panel/shared/_admin_layout.html' %}
+
+{% block title %}
+    جزییات تماس باما
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class=" alert alert-{{ message.tags }}" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="close"><span
+                                aria-hidden="true">&times;</span></button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <strong class="card-title">جزییات پیام</strong>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'contact_detail_admin_page' pk=contact.pk %}"
+                          novalidate="">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label>نام و نام خانوادگی</label>
+                                {{ form.full_name }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>ایمیل</label>
+                                <div class="input-group">
+                                    {{ form.email }}
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="validationCustom01">عنوان پیام</label>
+                                {{ form.title }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-12 mb-4">
+                                <label>متن پیام</label>
+                                {{ form.message }}
+                            </div>
+                            <div class="form-group col-md-12 mb-4">
+                                <label>متن پاسخ در نظر گرفته شده</label>
+                                {{ form.response }}
+                            </div>
+                        </div>
+                        <div class="custom-control custom-checkbox mb-3">
+                            {{ form.is_read_by_admin }}
+                            <label class="custom-control-label" for="customControlValidation1">خوانده شده / نشده</label>
+                        </div>
+                        <div class="custom-control custom-checkbox mb-3">
+                            {{ form.is_emailed }}
+                            <label class="custom-control-label" for="customControlValidation2">پاسخ ایمیل شده / نشده
+                                توسط ادمین</label>
+                        </div>
+                        <button class="btn btn-primary" type="submit">ذخیره</button>
+                    </form>
+                    <button class="btn btn-danger float-right" type="button" data-toggle="modal"
+                            data-target="#deleteModal">
+                        <span><i class="fe fe-trash-2"></i></span> حذف
+                    </button>
+
+                    <!-- Delete Confirmation Modal -->
+                    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+                         aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel">حذف پیام</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    آیا از حذف این پیام اطمینان دارید؟
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بی‌خیال
+                                    </button>
+                                    <form id="delete-form" method="post"
+                                          action="{% url 'contact_delete_admin_page' pk=contact.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">حذف</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- /.card-body -->
+            </div> <!-- /.card -->
+        </div>
+    </div>
+
+
+{% endblock %}

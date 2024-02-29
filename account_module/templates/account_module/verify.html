@@ -1,0 +1,37 @@
+{% extends 'shared/_layout.html' %}
+
+{% block title %}
+    احراز هویت
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="login-container p-5">
+
+        <form method="post" action="{% url 'verify_page' %}">
+            {% csrf_token %}
+
+            <h2>احراز هویت</h2>
+            <p>لطفا کد پیامک شده را وارد نمایید</p>
+
+            <p><span id="resend-otp-timer">00:00</span></p>
+            <a id="resend-otp-button" href="{% url 'resend_otp_code' %}" style="display: none;">ارسال مجدد کد</a>
+
+            <div class="input-div one">
+                <div class="i">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <div>
+                    {{ otp_form.otp }}
+                    {{ otp_form.otp.errors }}
+                </div>
+            </div>
+
+            <input type="submit" class="btn" value="ثبت">
+
+        </form>
+    </div>
+
+
+{% endblock %}

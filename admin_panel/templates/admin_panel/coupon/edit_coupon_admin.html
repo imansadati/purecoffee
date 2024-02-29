@@ -1,0 +1,102 @@
+{% extends 'admin_panel/shared/_admin_layout.html' %}
+{% load jalali_tags %}
+{% block title %}
+    جزییات کد تخفیف
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class=" alert alert-{{ message.tags }}" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="close"><span
+                                aria-hidden="true">&times;</span></button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <strong class="card-title">جزییات کد تخفیف</strong>
+                    <small class="form-text text-muted">- در صورت لزوم امکان تغییر مقایر وجود دارد</small>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'edit_coupon_admin_page' pk=current_coupon.id %}"
+                          novalidate="">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="col-md-4 mb-3">
+                                <label>عنوان کد تخفیف</label>
+                                <div class="input-group">
+                                    {{ form.title }}
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>کد تخفیف</label>
+                                <div class="input-group">
+                                    {{ form.code }}
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>میزان درصد کد تخفیف</label>
+                                {{ form.discount }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>معتبر از تاریخ</label>
+                                {{ form.valid_from }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>معتبر تا تاریخ</label>
+                                {{ form.valid_to }}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label>کابرانی که از کد تخفیف استفاده کردن</label>
+                                {{ form.used_by }}
+                            </div>
+                        </div>
+                        <div class="custom-control custom-checkbox mb-3">
+                            {{ form.is_active }}
+                            <label class="custom-control-label" for="customControlValidation1">فعال / غیرفعال</label>
+                        </div>
+
+                        <button class="btn btn-primary" type="submit">ذخیره</button>
+                    </form>
+                    <button class="btn btn-danger float-right" type="button" data-toggle="modal"
+                            data-target="#deleteModal">
+                        <span><i class="fe fe-trash-2"></i></span> حذف
+                    </button>
+
+                    <!-- Delete Confirmation Modal -->
+                    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+                         aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel">حذف کد تخفیف</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    آیا از حذف این کد تخفیف اطمینان دارید؟
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بی‌خیال
+                                    </button>
+                                    <form id="delete-form" method="post"
+                                          action="{% url 'coupon_delete_admin_page' pk=current_coupon.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">حذف</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- /.card-body -->
+            </div> <!-- /.card -->
+        </div>
+    </div>
+
+{% endblock %}

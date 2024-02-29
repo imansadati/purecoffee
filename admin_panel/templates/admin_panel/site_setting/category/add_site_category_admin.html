@@ -1,0 +1,65 @@
+{% extends 'admin_panel/shared/_admin_layout.html' %}
+
+{% block title %}
+    ایجاد دسته بندی موجود در صفحه اصلی
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class=" alert alert-{{ message.tags }}" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="close"><span
+                                aria-hidden="true">&times;</span></button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <strong class="card-title">ایجاد دسته بندی موجود در صفحه اصلی</strong>
+                </div>
+                <div class="card-body">
+                    <form enctype="multipart/form-data" method="post"
+                          action="{% url 'add_site_category_admin_page' %}"
+                          novalidate="">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label>عنوان</label>
+                                {{ form.title }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>دسته بندی محصول</label>
+                                <div class="input-group">
+                                    {{ form.product_category }}
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label>توضیحات کوتاه</label>
+                                <div class="input-group">
+                                    {{ form.short_description }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="example-fileinput1">تصویر</label>
+                            {{ form.image }}
+                            <img height="75px" class="pt-2" src="{{ current_cat.image.url }}"
+                                 alt="">
+                        </div>
+                        <div class="custom-control custom-checkbox mb-3">
+                            {{ form.is_active }}
+                            <label class="custom-control-label" for="customControlValidation1">فعال / غیرفعال</label>
+                        </div>
+
+                        <button class="btn btn-primary" type="submit">ایجاد</button>
+                    </form>
+                </div> <!-- /.card-body -->
+            </div> <!-- /.card -->
+        </div>
+    </div>
+
+{% endblock %}

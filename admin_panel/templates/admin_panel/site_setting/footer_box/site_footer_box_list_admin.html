@@ -1,0 +1,117 @@
+{% extends 'admin_panel/shared/_admin_layout.html' %}
+{% load poll_exteras %}
+{% block title %}
+    لیست باکس فوتر
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <!-- Small table -->
+        <div class="col-md-12 my-4">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class=" alert alert-{{ message.tags }}" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="close"><span
+                                aria-hidden="true">&times;</span></button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <h2 class="h4 mb-1">همه باکس های فوتر</h2>
+            <p class="mb-3">تمامی باکس های فوتر در اینجا آمده است و برای مشاهده جزییات و ویرایش بر روی علامت چشم کلیک
+                کنید</p>
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="toolbar">
+                        <form class="form">
+                            <a href="{% url 'add_site_footer_box_admin_page' %}">
+                                <button class="btn btn-primary float-right ml-3" type="button">اضافه کردن باکس فوتر +
+                                </button>
+                            </a>
+                            <div class="form-row">
+                                <div class="form-group col-auto">
+                                    <form action="" method="get">
+                                        <label for="search" class="sr-only">Search</label>
+                                        <input name="search" type="search" class="form-control" id="search1"
+                                               placeholder="جستجو">
+                                    </form>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- table -->
+                    {% if footerlinkbox_list %}
+                        <table class="table table-borderless table-hover">
+                            <thead>
+                            <tr>
+                                <td>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="all2">
+                                        <label class="custom-control-label" for="all2"></label>
+                                    </div>
+                                </td>
+                                <th><strong>شناسه</strong></th>
+                                <th><strong>عنوان</strong></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {% for fbox in footerlinkbox_list %}
+                                <tr>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="{{ fbox.id }}">
+                                            <label class="custom-control-label" for="{{ fbox.id }}"></label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 text-muted">{{ fbox.id }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 text-muted">{{ fbox.title }}</p>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'edit_site_footer_box_admin_page' pk=fbox.id %}"><span
+                                                class="text-muted"><i
+                                                class="fe fe-eye"></i></span></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <div class="alert alert-warning">
+                            <p>هیچ باکس فوتری یافت نشد
+                            </p>
+                        </div>
+                    {% endif %}
+                    {% if is_paginated %}
+                        <nav aria-label="Table Paging" class="mb-0 text-muted">
+                            <ul class="pagination justify-content-center mb-0">
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item"><a class="page-link"
+                                                             href="?page={{ page_obj.previous_page_number }}">قبلی</a>
+                                    </li>
+                                {% endif %}
+                                {% for pageNumber in paginator.page_range %}
+                                    <li class="page-item {% if pageNumber == page_obj.number %}active{% endif %}"><a
+                                            class="page-link" href="?page={{ pageNumber }}">{{ pageNumber }}</a></li>
+
+                                {% endfor %}
+
+                                {% if page_obj.has_next %}
+                                    <li class="page-item"><a class="page-link"
+                                                             href="?page={{ page_obj.next_page_number }}">بعدی</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    {% endif %}
+                </div>
+            </div>
+        </div> <!-- customized table -->
+    </div>
+
+{% endblock %}

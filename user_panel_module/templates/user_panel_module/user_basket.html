@@ -1,0 +1,129 @@
+{% extends 'shared/_layout.html' %}
+{% load thumbnail %}
+{% load poll_exteras %}
+
+{% block title %}
+    سبد خرید
+{% endblock %}
+
+
+
+{% block content %}
+
+
+    <div id="order-detail-content">
+        <div class="pa-breadcrumb">
+            <div class="container-fluid">
+                <div class="pa-breadcrumb-box">
+                    <h1>سبد خرید</h1>
+                    <ul>
+                        <li><a href="{% url 'home_page' %}">خانه</a></li>
+                        <li>سبد خرید</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% if order.orderdetail_set.all %}
+            <div class="pa-cart spacer-top spacer-bottom">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="pa-cart-box">
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th>تصویر محصول</th>
+                                        <th>نام محصول</th>
+                                        <th>قیمت</th>
+                                        <th>تعداد</th>
+                                        <th>مجموع</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+
+                                    {% for detail in order.orderdetail_set.all %}
+
+                                        <tr>
+
+                                            <td>
+                                                <div class="pa-cart-img">
+                                                    {% thumbnail detail.product.image "70x65" quality=95 crop='center' as im %}
+                                                        <img src="{{ im.url }}" alt="{{ detail.product.title }}">
+                                                    {% endthumbnail %}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <a class="lead"
+                                                   href="{{ detail.product.get_absolute_url }}">{{ detail.product.title }}</a>
+
+                                                {% if detail.color %}
+                                                    <p class="text-muted">رنگ : {{ detail.color }}</p>
+                                                {% endif %}
+
+                                                {% if detail.grind %}
+                                                    <p class="text-muted">سایز آسیاب : {{ detail.grind }}</p>
+                                                {% endif %}
+
+                                            </td>
+                                            <td>{{ detail.product.price | three_digits_currency }}</td>
+
+                                            <td>
+                                                <div class="pa-cart-quantity">
+                                                    <button class="pa-sub"
+                                                            onclick="changeOrderDetailCount({{ detail.id }},'decrease','{{ detail.color }}')">
+                                                    </button>
+
+                                                    <input id="quantity-value" onkeydown="return false" type="number"
+                                                           value="{{ detail.count }}"
+                                                           autocomplete="off" min="1">
+                                                    <button id="pa-123" class="pa-add"
+                                                            onclick="changeOrderDetailCount({{ detail.id }},'increase','{{ detail.color }}')">
+                                                    </button>
+
+                                                </div>
+                                                <input type="hidden" id="availability-count"
+                                                       value="{{ detail.product.availability_count }}">
+                                            </td>
+                                            <td>{{ detail.get_total_price | three_digits_currency }}</td>
+                                            <td>
+                                                <a href="#" onclick="removeOrderDetail({{ detail.id }})">
+                                                    <i class="fa fa-times-circle"></i> حذف محصول </a>
+                                            </td>
+                                        </tr>
+
+                                    {% endfor %}
+                                    <td colspan="4"><a href="{% url 'product_list' %}" class="pa-btn">ادامه خرید</a>
+                                    </td>
+                                    </tbody>
+                                </table>
+                                <div class="pa-garnd-total">
+                                    <p>
+                                        <span>جمع کل : </span>
+                                        <span>{{ sum | three_digits_currency }}</span>
+                                    </p>
+                                    {#                                    {% if sum > total_amount %}#}
+                                    {#                                        <p>#}
+                                    {#                                            <span>بعد از تخفیف : </span>#}
+                                    {#                                            <span>{{ total_amount | three_digits_currency }}</span>#}
+                                    {#                                        </p>#}
+                                    {#                                    {% endif %}#}
+                                    <a href="{% url 'user_checkout' %}" class="pa-btn">رفتن به پرداخت </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="custom-size alert text-center m-5 alert-warning">
+                <p>سبد خرید شما خالی است.</p>
+            </div>
+            <div class="pa-place-order-btn text-center mb-5">
+                <a href="{% url 'product_list' %}">
+                    <button class="pa-btn">ادامه خرید</button>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

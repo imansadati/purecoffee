@@ -1,0 +1,103 @@
+{% extends 'shared/_layout.html' %}
+{% load thumbnail %}
+{% load poll_exteras %}
+{% load render_partial %}
+
+{% block title %}
+    جزییات مقاله
+{% endblock %}
+
+{% block content %}
+
+    <div class="pa-breadcrumb">
+        <div class="container-fluid">
+            <div class="pa-breadcrumb-box">
+                <h1>مقالات</h1>
+                <ul>
+                    <li><a href="{% url 'home_page' %}">خانه</a></li>
+                    <li>وبلاگ</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="pa-blog-single spacer-top spacer-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="pa-blog-box">
+
+
+                        <div class="pa-blog-title">
+                            <a href="#" class="pa-blog-category">{{ article_category.title }}</a>
+                            <h2>{{ article.title }}</h2>
+                            <a href="#" class="pa-blog-date">{{ article.create_date |  show_jalali_date }}</a>
+                            <p>{{ article.short_description }}</p>
+                        </div>
+                        <div class="pa-blog-view">
+                            <ul>
+                                <li>
+                                    <a href="#"><i class="far fa-heart"></i> 900</a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fas fa-eye"></i> 830</a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fas fa-share-alt"></i> اشتراک</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="pa-bs-content">
+                        <p>{{ article.description|safe }}</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="pa-blog-sidebar">
+
+
+                        {% render_partial 'article_module.views.article_category_component' %}
+
+                        <div class="pa-widget pa-product-widget">
+                            <h2 class="pa-sidebar-title">مقاله های اخیر</h2>
+                            <ul>
+                                {% for article in recent_articles %}
+                                    <li>
+                                        <div class="pa-pro-wid-img">
+                                            <img src="{{ article.image.url }}" alt="{{ article.title }}"
+                                                 class="img-fluid">
+                                        </div>
+                                        <div class="pa-pro-wid-content">
+                                            <h4><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h4>
+                                            <p>{{ article.short_description | linebreaksbr|slice:":100" }}...</p>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+
+                            </ul>
+                        </div>
+                        {% if article_tags %}
+                            <div class="pa-widget pa-tag">
+                                <h2 class="pa-sidebar-title">تگ ها</h2>
+                                <ul>
+                                    {% for tag in article_tags %}
+                                        <li><a href="{% url 'article_tag_page' tag=tag.url_title %}">{{ tag.title }}</a>
+                                        </li>
+                                    {% endfor %}
+
+                                </ul>
+                            </div>
+                        {% endif %}
+                        <div class="pa-widget">
+                            <h2 class="pa-sidebar-title">شبکه های اجتماعی</h2>
+                            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

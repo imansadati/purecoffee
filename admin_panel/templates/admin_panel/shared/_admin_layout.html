@@ -1,0 +1,19 @@
+{% load render_partial %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    {% include 'admin_panel/shared/header_refrences.html' %}
+</head>
+<body class="vertical light rtl">
+<div class="wrapper">
+    {% render_partial 'admin_panel.views.site_nav_component' %}
+    {% render_partial 'admin_panel.views.site_sidebar_component' %}
+    <main role="main" class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+    {% include 'admin_panel/shared/footer_refrences.html' %}
+</div>
+</body>
+</html>

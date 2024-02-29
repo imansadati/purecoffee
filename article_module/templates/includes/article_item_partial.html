@@ -1,0 +1,24 @@
+{% load thumbnail %}
+{% load poll_exteras %}
+
+<div class="pa-blog-box">
+
+    {% thumbnail article.image "294x210" quality=95 crop='center' as im %}
+        <img src="{{ im.url }}" alt="{{ article.title }}">
+    {% endthumbnail %}
+
+    <div class="pa-blog-title">
+
+        {#        <a href="{% url 'article_category_page' cat=article_category.url_title %}"#}
+        {#           class="pa-blog-category">{{ article_category.title }}</a>#}
+
+        <h2>
+            <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+        </h2>
+
+        <p class="pa-blog-date">{{ article.create_date |  show_jalali_date }}</p>
+        <p class="one-line-text">{{ article.short_description }}</p>
+
+    </div>
+
+</div>

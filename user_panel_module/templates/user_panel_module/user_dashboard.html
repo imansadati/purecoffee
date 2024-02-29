@@ -1,0 +1,106 @@
+{% extends 'shared/_layout.html' %}
+{% load poll_exteras %}
+{% block title %}
+    داشبورد
+{% endblock %}
+
+{% block content %}
+    <div class="pa-breadcrumb">
+        <div class="container-fluid">
+            <div class="pa-breadcrumb-box">
+                <h1>داشبورد</h1>
+                <ul>
+                    <li><a href="{% url 'home_page' %}">خانه</a></li>
+                    <li>داشبورد</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="pa-profile spacer-top spacer-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="pa-profile-box">
+                        <div class="pa-profile-img">
+                            <div class="pa-profile-name-box">
+                                <h2 class="pa-profile-name">نام شما :<span>{{ current_user.full_name }}</span></h2>
+                                <p class="text-muted"> تاریخ عضویت : {{ current_user.date_joined|show_jalali_date }}</p>
+                            </div>
+                        </div>
+
+                        <div class="pa-profile-data">
+                            <ul>
+                                <li>
+                                    <p>شماره موبایل :</p>
+                                    <p>{{ current_user.phone_number }}</p>
+                                </li>
+                                <li>
+                                    <p>ایمیل :</p>
+                                    <p>{{ current_user.email }}</p>
+                                </li>
+                                <li>
+                                    <p>موجودی کیف پول : </p>
+                                    {% if wallet %}
+                                        <p>{{ wallet.balance|three_digits_currency }}</p>
+                                    {% else %}
+                                        <p class="alert alert-warning">کیف پول شما خالی میباشد</p>
+                                    {% endif %}
+                                </li>
+                                <li>
+                                    <p>آدرس حمل و نقل:</p>
+                                    {% if current_address %}
+                                        <p>{{ current_address.province }} - {{ current_address.city }}
+                                            - {{ current_address.exact_address }}</p>
+                                    {% else %}
+                                        <div class="alert alert-warning">
+                                            <p>هیچ آدرسی یافت نشد</p>
+                                        </div>
+                                    {% endif %}
+                                </li>
+                                <li>
+                                    <a class="mx-5" href="{% url 'user_change_password' %}">
+                                        <button class="pa-btn">تغییر کلمه عبور</button>
+                                    </a>
+                                    <a href="{% url 'user_shopping' %}">
+                                        <button class="pa-btn">سفارش ها</button>
+                                    </a>
+                                </li>
+                                <li>
+                                    <button class="pa-btn" type="button" data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal">خروج از حساب
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+                             aria-labelledby="deleteModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteModalLabel">خروج</h5>
+                                        <button type="button" class="pa-login-close close" data-bs-dismiss="modal"
+                                                aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        آیا از خروج حساب کاربری خود اطمینان دارید؟
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بی‌خیال
+                                        </button>
+                                        <form id="delete-form" method="post"
+                                              action="{% url 'logout_user' %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger">خروج</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

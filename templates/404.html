@@ -1,0 +1,19 @@
+{% extends 'shared/_layout.html' %}
+{% load thumbnail %}
+
+{% block title %}
+    صفحه 404
+{% endblock %}
+
+{% block content %}
+
+    {% thumbnail "730x200" quality=98 crop="center" %}
+        <img src="/../static/images/404.png" alt="404" class="img-fluid">
+    {% endthumbnail %}
+
+    <h1>
+        <b>متاسفانه</b> صفحه مورد نظر یافت نشد
+    </h1>
+
+
+{% endblock %}

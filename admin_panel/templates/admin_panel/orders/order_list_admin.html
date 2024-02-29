@@ -1,0 +1,210 @@
+{% extends 'admin_panel/shared/_admin_layout.html' %}
+{% load poll_exteras %}
+
+{% block title %}
+    لیست سفارشات
+{% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class=" alert alert-{{ message.tags }}" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="close"><span
+                                    aria-hidden="true">&times;</span></button>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <h2 class="h3 mb-3 page-title">سفارشات</h2>
+                <p class="mb-3">تمامی سفارشات در اینجا آمده است و برای مشاهده جزییات بر روی علامت سه نقطه کلیک
+                    کنید</p>
+
+                <div class="form-row">
+                    <div class="form-group col-auto">
+                        <form action="" method="get">
+                            <label for="search" class="sr-only">Search</label>
+                            <input name="search" type="search" class="form-control" id="search1"
+                                   placeholder="جستجو">
+                        </form>
+                    </div>
+                </div>
+                <div class="row mb-4 items-align-center">
+                    <div class="col-md mb-3">
+                        <ul class="nav nav-pills justify-content-start">
+                            <li class="nav-item nav-status {% if order == 'default' %}active{% endif %}">
+                                <a class="nav-link pr-2 pl-0" href="?order=default">همه
+                                    <span class="badge badge-pill bg-white border text-muted ml-2">{{ counts.default }}</span></a>
+                            </li>
+                            <li class="nav-item nav-status {% if order == 'waiting' %}active{% endif %}">
+                                <a class="nav-link px-2" href="?order=waiting">انتظار
+                                    <span class="badge badge-pill bg-white border text-muted ml-2">{{ counts.waiting }}</span></a>
+                            </li>
+                            <li class="nav-item nav-status {% if order == 'processing' %}active{% endif %}">
+                                <a class="nav-link px-2" href="?order=processing">درحال پردازش
+                                    <span class="badge badge-pill bg-white border text-muted ml-2">{{ counts.processing }}</span></a>
+                            </li>
+                            <li class="nav-item nav-status {% if order == 'sent' %}active{% endif %}">
+                                <a class="nav-link px-2" href="?order=sent">ارسال شده
+                                    <span class="badge badge-pill bg-white border text-muted ml-2">{{ counts.sent }}</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="form-row ml-4">
+                        <div class="form-group col-auto">
+                            <form id="search-date-form" action="" method="get">
+                                <input class="form-control" id="search-date" autocomplete="off" type="text"
+                                       name="search-date" data-jdp
+                                       placeholder="نمایش تاریخ"/>
+                            </form>
+                        </div>
+                    </div>
+                    <button form="search-date-form" class="btn btn-outline-primary h-75" type="submit">جستجو
+                    </button>
+                </div>
+
+                {% if order_list %}
+                    <table class="table border table-hover bg-white">
+                        <thead>
+                        <tr role="row">
+                            <th>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="all">
+                                    <label class="custom-control-label" for="all"></label>
+                                </div>
+                            </th>
+                            <th><strong>شناسه</strong></th>
+                            <th><strong>کاربر</strong></th>
+                            <th><strong>تاریخ پرداخت</strong></th>
+                            <th><strong>آدرس</strong></th>
+                            <th><strong>قیمت کل</strong></th>
+                            <th><strong>قیمت نهایی پرداخت شده</strong></th>
+                            <th><strong>وضعیت سفارش</strong></th>
+                            <th><strong>وضعیت نهایی شدن پرداخت</strong></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for order in order_list %}
+                            <tr>
+                                <td>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="{{ order.id }}">
+                                        <label class="custom-control-label" for="{{ order.id }}"></label>
+                                    </div>
+                                </td>
+                                <td>{{ order.id }}</td>
+                                <td>{{ order.user.full_name }}</td>
+                                <td>{{ order.payment_date|show_jalali_date }}</td>
+                                <td>{{ order.address.province }} - {{ order.address.exact_address|safe }}</td>
+                                <td>{{ order.total_amount | three_digits_currency }}</td>
+                                <td>{{ order.payable_amount | three_digits_currency }}</td>
+                                {% if order.status == 'انتظار' %}
+                                    <td><span
+                                            class="badge badge-pill font-weight-bold badge-warning">{{ order.status }}</span>
+                                    </td>
+                                {% elif order.status == 'ارسال شده' %}
+                                    <td><span
+                                            class="badge badge-pill font-weight-bold badge-success">{{ order.status }}</span>
+                                    </td>
+                                {% else %}
+                                    <td><span
+                                            class="badge badge-pill font-weight-bold badge-info">{{ order.status }}</span>
+                                    </td>
+                                {% endif %}
+                                <td>
+                                    {% if order.is_paid %}
+                                        <span class="badge badge-pill font-weight-bold badge-success">پرداخت شده</span>
+                                    {% else %}
+                                        <span class="badge badge-pill font-weight-bold badge-warning">پرداخت نشده</span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm dropdown-toggle more-vertical" type="button"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="text-muted sr-only">Action</span>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-left">
+                                            <a href="{% url 'edit_order_admin_page' pk=order.id %}">
+                                                <button class="dropdown-item btn float-right" type="button">
+                                                    <i class="fe fe-eye"></i> مشاهده
+                                                </button>
+                                            </a>
+                                            <button class="dropdown-item btn float-right" type="button"
+                                                    data-toggle="modal"
+                                                    data-target="#deleteModal">
+                                                <span><i class="fe fe-trash-2"></i></span> حذف
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Delete Confirmation Modal -->
+                            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+                                 aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteModalLabel">حذف سفارش</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            آیا از حذف این سفارش اطمینان دارید؟
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">بی‌خیال
+                                            </button>
+                                            {#                                            <form id="delete-form" method="post"#}
+                                            {#                                                  action="{% url 'order_delete_admin_page' pk=order.id %}">#}
+                                            {#                                                {% csrf_token %}#}
+                                            {#                                                <button type="submit" class="btn btn-danger">حذف</button>#}
+                                            {#                                            </form>#}
+                                            <a class="btn btn-danger"
+                                               href="{% url 'order_delete_admin_page' pk=order.id %}">حذف</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="alert alert-warning">
+                        <p>هیچ سفارشی یافت نشد.</p>
+                    </div>
+                {% endif %}
+                {% if is_paginated %}
+                    <nav aria-label="Table Paging" class="mb-0 text-muted">
+                        <ul class="pagination justify-content-center mb-0">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item"><a class="page-link"
+                                                         href="?page={{ page_obj.previous_page_number }}">قبلی</a>
+                                </li>
+                            {% endif %}
+                            {% for pageNumber in paginator.page_range %}
+                                <li class="page-item {% if pageNumber == page_obj.number %}active{% endif %}"><a
+                                        class="page-link" href="?page={{ pageNumber }}">{{ pageNumber }}</a></li>
+
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                                <li class="page-item"><a class="page-link"
+                                                         href="?page={{ page_obj.next_page_number }}">بعدی</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            </div>
+        </div> <!-- .row -->
+    </div>
+
+{% endblock %}

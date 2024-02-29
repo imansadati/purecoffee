@@ -1,0 +1,47 @@
+{% extends 'admin_panel/shared/_admin_layout.html' %}
+
+{% block title %}
+    ایجاد تراکنش جدید
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class=" alert alert-{{ message.tags }}" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="close"><span
+                                aria-hidden="true">&times;</span></button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <strong class="card-title">ایجاد تراکنش جدید</strong>
+                </div>
+                <div class="card-body">
+                    <form method="post"
+                          action="{% url 'add_transaction_wallet_admin_page' %}"
+                          novalidate="">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label>کاربر</label>
+                                {{ form.user }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>مبلغ تراکنش</label>
+                                {{ form.amount }}
+                                <span id="formattedAmount"></span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" type="submit">ایجاد</button>
+                    </form>
+                </div> <!-- /.card-body -->
+            </div> <!-- /.card -->
+        </div>
+    </div>
+    <script src="/static/admin_panel/js/currency-converter.js"></script>
+{% endblock %}

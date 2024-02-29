@@ -1,0 +1,63 @@
+{% extends 'shared/_layout.html' %}
+{% block title %}
+    صفحه تماس با ما
+{% endblock %}
+
+{% block content %}
+    <div class="pa-breadcrumb">
+        <div class="container-fluid">
+            <div class="pa-breadcrumb-box">
+                <h1>صفحه تماس با ما</h1>
+                <ul>
+                    <li><a href="{% url 'home_page' %}">خانه</a></li>
+                    <li>تماس با ما</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="pa-contact spacer-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="pa-contact-form">
+                        <form action="{% url 'contact_us_page' %}" method="post">
+                            {% csrf_token %}
+                            {{ form.full_name }}
+                            {{ form.full_name.errors }}
+                            {{ form.email }}
+                            {{ form.email.errors }}
+                            {{ form.title }}
+                            {{ form.title.errors }}
+                            {{ form.message }}
+                            {{ form.message.errors }}
+                            <button type="submit" class="pa-btn">ارسال</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="pa-contact-detail">
+                        <div class="pa-contact-box">
+                            <h4>شماره تلفن </h4>
+                            <p>{{ site_setting.phone_number }}</p>
+                        </div>
+                        <div class="pa-contact-box">
+                            <h4>ایمیل</h4>
+                            <p>{{ site_setting.email }}</p>
+                        </div>
+                        <div class="pa-contact-box">
+                            <h4>شبکه های اجتماعی</h4>
+                            <a href="https://www.instagram.com/{{ social_medias.instagram }}" class="social-icon"><i
+                                    class="fab fa-instagram"></i></a>
+                            <a href=http://t.me/{{ social_medias.telegram }}" class="social-icon"><i
+                                    class="fab fa-telegram"></i></a>
+                            <a href="https://www.youtube.com/{{ social_medias.youtube }}" class="social-icon"><i
+                                    class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'admin_panel/shared/_admin_layout.html' %}
+
+{% block title %}
+    جزییات محصولات برتر
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class=" alert alert-{{ message.tags }}" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="close"><span
+                                aria-hidden="true">&times;</span></button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <strong class="card-title">جزییات محصولات برتر</strong>
+                    <small class="form-text text-muted">- در صورت لزوم امکان تغییر مقایر وجود دارد</small>
+                </div>
+                <div class="card-body">
+                    <form enctype="multipart/form-data" method="post"
+                          action="{% url 'edit_site_top_product_admin_page' pk=current_top.id %}"
+                          novalidate="">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label>عنوان</label>
+                                {{ form.title }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label> محصول</label>
+                                {{ form.product }}
+                            </div>
+                        </div>
+                        <div class="custom-control custom-checkbox mb-3">
+                            {{ form.is_active }}
+                            <label class="custom-control-label" for="customControlValidation1">فعال / غیرفعال</label>
+                        </div>
+
+                        <button class="btn btn-primary" type="submit">ذخیره</button>
+                    </form>
+                    <button class="btn btn-danger float-right" type="button" data-toggle="modal"
+                            data-target="#deleteModal">
+                        <span><i class="fe fe-trash-2"></i></span> حذف
+                    </button>
+
+                    <!-- Delete Confirmation Modal -->
+                    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+                         aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel">حذف محصول برتر</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    آیا از حذف این محصول برتر اطمینان دارید؟
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بی‌خیال
+                                    </button>
+                                    <form id="delete-form" method="post"
+                                          action="{% url 'site_top_product_delete_admin_page' pk=current_top.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">حذف</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- /.card-body -->
+            </div> <!-- /.card -->
+        </div>
+    </div>
+
+{% endblock %}

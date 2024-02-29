@@ -1,0 +1,74 @@
+{% extends 'shared/_layout.html' %}
+
+{% block title %}
+    ثبت نام
+{% endblock %}
+
+{% block content %}
+    <div class="login-container p-5">
+
+
+        <form autocomplete="off" method="post" action="{% url 'register_page' %}">
+            {% csrf_token %}
+
+            <h2>فرم ثبت نام</h2>
+            <div class="input-div one">
+                <div class="i">
+                    <i class="fas fa-user" aria-hidden="true"></i>
+                </div>
+                <div>
+                    {{ register_form.full_name }}
+                    {{ register_form.full_name.errors }}
+                </div>
+            </div>
+            <div class="input-div two">
+                <div class="i">
+                    <i class="fas fa-phone" aria-hidden="true"></i>
+                </div>
+                <div>
+                    {{ register_form.phone_number }}
+                    {{ register_form.phone_number.errors }}
+                </div>
+            </div>
+            <div class="input-div one">
+                <div class="i">
+                    <i class="fas fa-envelope" aria-hidden="true"></i>
+                </div>
+                <div>
+                    {{ register_form.email }}
+                    {{ register_form.email.errors }}
+                </div>
+            </div>
+            <div class="input-div two">
+                <div class="i">
+                    <i class="fas fa-key" aria-hidden="true"></i>
+                </div>
+                <div>
+                    {{ register_form.password }}
+                    {{ register_form.password.errors }}
+                </div>
+            </div>
+
+
+            <div class="input-div one">
+                <div class="i">
+                    <i class="fas fa-key" aria-hidden="true"></i>
+                </div>
+                <div>
+                    {{ register_form.confirm_password }}
+                    {{ register_form.confirm_password.errors }}
+                </div>
+            </div>
+            <br>
+            <input type="submit" class="btn-action" value="ثبت نام">
+            <div class="account">
+                <p>حساب کاربری دارید؟</p>
+                <a href="{% url 'login_page' %}">ورود</a>
+            </div>
+
+        </form>
+
+
+    </div>
+
+{% endblock %}

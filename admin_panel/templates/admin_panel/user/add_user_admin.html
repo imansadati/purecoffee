@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ثبت نام ادمین</title>
+</head>
+<body>
+{% include 'admin_panel/shared/header_refrences.html' %}
+
+<div class="wrapper vh-100 rtl">
+    <div class="row align-items-center h-100">
+        <form action="{% url 'add_user_admin_page' %}" method="post" class="col-lg-6 col-md-8 col-10 mx-auto">
+            {% csrf_token %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class=" alert alert-{{ message.tags }}" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="close"><span
+                                aria-hidden="true">&times;</span></button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="mx-auto text-center my-4">
+                <a class="navbar-brand mx-auto mt-2 flex-fill text-center"
+                   href="{% url 'index_admin_page' %}">
+                    <img src="/static/images/fav.png" alt="">
+                </a>
+                <h2 class="my-3">ثبت نام ادمین</h2>
+            </div>
+            <div class="right form-group">
+                <label>نام کاربری</label>
+                {{ form.username }}
+                {{ form.username.errors }}
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label>نام و نام خانوادگی</label>
+                    {{ form.full_name }}
+                    {{ form.full_name.errors }}
+                </div>
+                <div class="form-group col-md-4">
+                    <label>ایمیل</label>
+                    {{ form.email }}
+                    {{ form.email.errors }}
+                </div>
+                <div class="form-group col-md-4">
+                    <label>شماره موبایل</label>
+                    {{ form.phone_number }}
+                    {{ form.phone_number.errors }}
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>رمز عبور</label>
+                        {{ form.password }}
+                        {{ form.password.errors }}
+                    </div>
+                    <div class="form-group">
+                        <label>تکرار رمز عبور</label>
+                        {{ form.confirm_password }}
+                        {{ form.confirm_password.errors }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <p class="mb-2">ملاحظات</p>
+                    <p class="small text-muted mb-2"> برای ثبت نام کاربر جدید به موارد زیر توجه کنید : </p>
+                    <ul class="small text-muted pl-4 mb-0">
+                        <li> نام کاربری باید یونیک باشد</li>
+                        <li>شماره موبایل نباید از قبل وارد شده باشد</li>
+                        <li>بعد از ثبت نام گزینه کارمند بودن کاربر فعال میشود</li>
+                        <li>باید رمز عبور و تکرار کلمه عبور یکسان باشد</li>
+                    </ul>
+                </div>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">ثبت نام</button>
+        </form>
+    </div>
+</div>
+
+{% include 'admin_panel/shared/footer_refrences.html' %}
+</body>
+</html>

@@ -1,0 +1,144 @@
+{% extends 'shared/_layout.html' %}
+{% load poll_exteras %}
+{% block title %}
+    پرداخت - تسویه حساب
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="pa-breadcrumb">
+        <div class="container-fluid">
+            <div class="pa-breadcrumb-box">
+                <h1>تکمیل اطلاعات</h1>
+                <ul>
+                    <li><a href="{% url 'home_page' %}">خانه</a></li>
+                    <li>پرداخت</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="pa-checkout spacer-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="pa-bill-form">
+                        <form id="my-form" method="post" action="{% url 'user_checkout' %}">
+                            {% csrf_token %}
+                            <label class="pa-bill-title">
+                                جزئیات صورتحساب
+                            </label>
+                            <label>
+                                {{ checkout_form.full_name }}
+                                {{ checkout_form.full_name.errors }}
+                            </label>
+                            <label>
+                                {{ checkout_form.phone_number }}
+                                {{ checkout_form.phone_number.errors }}
+                            </label>
+                            <label>
+                                {{ checkout_form.province }}
+                                {{ checkout_form.province.errors }}
+                            </label>
+                            <label>
+                                {{ checkout_form.city }}
+                                {{ checkout_form.city.errors }}
+                            </label>
+                            <label>
+                                {{ checkout_form.exact_address }}
+                                {{ checkout_form.exact_address.errors }}
+                            </label>
+                            <label>
+                                {{ checkout_form.plaque }}
+                                {{ checkout_form.plaque.errors }}
+                            </label>
+                            <label>
+                                {{ checkout_form.postal_code }}
+                                {{ checkout_form.postal_code.errors }}
+                            </label>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="pa-bill-detail">
+                        <p class="pa-bill-title">جزئیات سفارش</p>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>نام محصول</th>
+                                <th>کل تعداد</th>
+                                <th>قیمت</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+
+                            {% for order in order.orderdetail_set.all %}
+                                <tr>
+                                    <td>{{ order.product.title }}</td>
+                                    <td>{{ order.count }}</td>
+                                    <td>{{ order.get_total_price | three_digits_currency }}</td>
+                                </tr>
+                            {% endfor %}
+
+
+                            <tr class="pa-checkout-total">
+                                <td>جمع کل</td>
+                                <td>{{ sum | three_digits_currency }}</td>
+                            </tr>
+                            <tr class="pa-checkout-total">
+                                <td>هزینه حمل و نقل</td>
+                                <td>{% if site_setting.shipping_amount == 0 %}
+                                    رایگان
+                                {% else %}
+                                    {{ site_setting.shipping_amount | three_digits_currency }}
+                                {% endif %} </td>
+                            </tr>
+                            <tr class="pa-checkout-total">
+                                <td>موجودی کیف پول شما</td>
+                                <td>{{ wallet.balance | three_digits_currency }}</td>
+                            </tr>
+                            <tr class="pa-checkout-total">
+                                <td>مبلغ قابل پرداخت</td>
+                                {% if payable_amount <= 0 %}
+                                    <td>امکان پرداخت وجود ندارد. میبایست جمع کل از موجودی کیف پول بیشتر باشد</td>
+                                {% else %}
+                                    <td>{{ payable_amount | three_digits_currency }}</td>
+                                {% endif %}
+                            </tr>
+                            </tbody>
+                        </table>
+                        <br>
+                        <small class="alert-info">- موجودی کیف پول زمانی از مبلغ نهایی کسر میشود که مبلغ نهایی خرید
+                            بالای
+                            {{ min_purchase|floatformat }} هزار تومان باشد </small>
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class=" alert alert-{{ message.tags }} text-center" role="alert">
+                                    <button type="button" class="pa-login-close close" data-bs-dismiss="alert"
+                                            aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <form method="post" id="coupon">
+                            {% csrf_token %}
+                            <div class="pa-garnd-total">
+                                {{ coupon_form.coupon }}
+                                {{ coupon_form.coupon.errors }}
+                            </div>
+                            <button form="coupon" class="pa-btn my-3" type="submit">اعمال کد تخفیف</button>
+                        </form>
+                        <div class="pa-place-order-btn">
+                            <button form="my-form" type="submit" class="pa-btn">سفارش دهید</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
