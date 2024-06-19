@@ -2,7 +2,7 @@
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
     <data-source source="LOCAL" name="db" uuid="e6d0e8fc-c254-4624-a536-1314fa05ed38">
-      <driver-ref>861f284e-3679-4b30-8753-2f00b471a590</driver-ref>
+      <driver-ref>28bb416f-add8-49e8-a25a-10f36350a7fd</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:D:\Me\my_files\Projects\CoffeeShop\db.sqlite3</jdbc-url>

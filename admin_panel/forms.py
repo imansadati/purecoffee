@@ -1,5 +1,3 @@
-import re
-
 from ckeditor.fields import CKEditorWidget
 from colorfield.widgets import ColorWidget
 from django import forms
